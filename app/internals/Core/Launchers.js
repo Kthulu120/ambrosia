@@ -27,7 +27,7 @@ const launchers = {
   'Cemu': "",
   'Higan': "",
   'Citra': "",
-  'PPSSPP': ""
+  'PPSSPP': "",
   // 3rd Party Launchers
   'Steam': "",
   'Origin': "",

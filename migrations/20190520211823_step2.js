@@ -11,7 +11,8 @@ exports.up = function(knex, Promise) {
       table.string('file_path').nullable();
       table.string('nectar_id').nullable();
     }),
-    knex.schema.table('launchers', function(table){
+
+    knex.schema.createTable('launchers', function(table){
       table.increments('id').primary();
       table.string('name').notNull();
       // Universal Flags that enabled for every game
@@ -21,7 +22,7 @@ exports.up = function(knex, Promise) {
     knex.schema.createTable('launchers_platforms', function(table){
       table.increments('id').primary();
       table.integer('platform_id').references('games.id');
-      table.integer('launcher.id').references('launchers.id');
+      table.integer('launcher_id').references('launchers.id');
     }),
   ])
 };

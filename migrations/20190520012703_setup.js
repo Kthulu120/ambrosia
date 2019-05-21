@@ -12,7 +12,7 @@ exports.up = function(knex, Promise) {
     knex.schema.createTable('platforms_games', function(table){
       table.increments('id').primary();
       table.integer('game_id').references('games.id');
-      table.integer('platform_id').references('platform.id');
+      table.integer('platform_id').references('platforms.id');
     }),
     knex.schema.createTable('platforms', function(table){
       table.increments('id').primary();
