@@ -20,7 +20,6 @@ export default async function readGameDirectory(folder: string) {
     //const gameDir = await fsPromises.readdir(folder, {'withFileTypes ': true})
     glob(__dirname + '/*.iso', {}, (err, files)=>{
       if (!err && files.length > 0) {
-        console.log(files)
         filesToGame(files, platforms[konsole])
       }
     })
@@ -51,10 +50,8 @@ function filesToGame(files: Array<string>, platform: string): Array<GameType>{
             const primaryChoice = gameSearch[0]
             const id: number = primaryChoice.id
             const name: string = primaryChoice.name
-            const g  = new Game(id, name);
+            const g  = new Game(id, name, id, file.toString());
             g.platform = platforms[platform]
-            g.file_path = file.toString();
-            g.nectar_id = id
             saveGamesToDB([g])
           }
         })
@@ -75,6 +72,19 @@ function filesToGame(files: Array<string>, platform: string): Array<GameType>{
             file_path: g.file_path,
            }).save().error(err => {
             console.error(err)
+          }).then((newElement) => {
+            // Go get platform
+            let platform_id = null
+            Object.keys(platforms).forEach(function(key, index) {
+              if (platforms[key] === g.platform){
+                platform_id = index + 1
+              }
+          });
+          if(platform_id != null){
+            // Update Platform Game Junction Table
+            newElement.platforms().attach(platform_id)
+          }
+           console.log(newElement.platforms())
           })
         }
       })

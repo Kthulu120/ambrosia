@@ -4,8 +4,8 @@ exports.up = function(knex, Promise) {
     knex.schema.createTable('games', function(table){
       table.increments('id').primary();
       table.string('title');
-      table.string('cover_img');
-      table.integer('metacritic_score');
+      table.string('cover_img').nullable();
+      table.integer('metacritic_score').nullable();;
 
 
     }),
