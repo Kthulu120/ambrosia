@@ -1,5 +1,5 @@
 // @flow
-import type { Game } from "../internals/Games/Game";
+import { Game } from "../internals/Games/Game";
 import { GetState, Dispatch } from '../reducers/types';
 import {GameModel} from './../index'
 export const SET_CLOUD_GAMES = 'SET_CLOUD_GAMES';
@@ -15,10 +15,15 @@ export function setInstalledGames(games: Array<Game>) {
 // check for installed games and add them to redux
 export function setInstGamesRedux() {
   return (dispatch: Dispatch, getState: GetState) => {
-    const { games } = getState();
-    const all_games = GameModel.fetchAll()
-    console.log(all_games)
-    dispatch(setInstalledGames(all_games));
+    // Initiate Search
+    const all_games = GameModel.fetchAll().then((collection) =>{
+      const game_list = []
+      collection.forEach(element => {
+        game_list.push(Game.ModelToGameFactory(element))
+      });
+      dispatch(setInstalledGames(game_list));
+    })
+
   };
 }
 
