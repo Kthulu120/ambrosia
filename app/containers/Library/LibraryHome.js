@@ -1,19 +1,20 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Counter from '../components/Counter';
-import * as CounterActions from '../actions/counter';
+import LibraryHomePage from '../../components/Pages/LibraryHomePage.js';
+import * as LibraryActions from '../../actions/library';
+
 
 function mapStateToProps(state) {
   return {
-    counter: state.counter
+    installed_games: state.library.installed_games,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(CounterActions, dispatch);
+  return bindActionCreators(LibraryActions, dispatch);
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Counter);
+)(LibraryHomePage);

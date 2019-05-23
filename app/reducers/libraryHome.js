@@ -2,11 +2,11 @@
 import { SET_INSTALLED_GAMES } from '../actions/library';
 import type { Action } from './types';
 
-const state = {
+const stateobj = {
   installed_games: [],
 }
 
-export default function counter(state: Object = state, action: Action) {
+export default function library(state: Object = stateobj, action: Action) {
   switch (action.type) {
     case SET_INSTALLED_GAMES:
       return Object.assign({}, state, {

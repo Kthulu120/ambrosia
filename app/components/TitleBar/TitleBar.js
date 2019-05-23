@@ -33,7 +33,7 @@ export default class TitleBar extends Component<Props> {
           <h5>Store</h5>
         </div>
         <div className="d-inline-block mr-2">
-          <h5>Library</h5>
+          <Link to={routes.LIBRARY}><h5>Library</h5></Link>
         </div>
         <div className="d-inline-block mr-2">
           <h5>Community</h5>
