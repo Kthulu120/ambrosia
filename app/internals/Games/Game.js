@@ -2,20 +2,38 @@
 
 export class Game{
 
-  id: number;
+  id: number | string;
   name: string;
   platform: Platform;
-  filePath: string;
+  nectar_id: string
+  file_path: string;
   alternativePlatforms: Array<string>;
+  launcher_model: Object;
 
 
 
-  constructor(id: number, name: string){
+  constructor(id: number, name: string, nectar_id: string, file_path: string, launcher_model: Object){
     this.id = id;
-    this.name = name
+    this.name = name;
+    this.nectar_id = nectar_id;
+    this.file_path = file_path;
+    this.launcher_model = launcher_model;
   }
 
+  static ModelToGameFactory(launcher_model: Game){
+    return new Game (
+      launcher_model.get('id'),
+      launcher_model.get('name'),
+      launcher_model.get('nectar_id'),
+      launcher_model.get('file_path'),
+      launcher_model,
+    )
+  }
+
+
+
 }
+
 export const platforms =  {
   "PlayStation 1": "PlayStation 1",
   "PlayStation 2": "PlayStation 2",

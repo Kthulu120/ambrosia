@@ -37,7 +37,6 @@ function filesToGame(files: Array<string>, platform: string): Array<GameType>{
   files.forEach(file => {
       // look up game based off name and platform
       const title = Parser.parseGameTitle(path.basename(file), true)
-      //console.log(title)
       axios.get('http://127.0.0.1:8000/search/game', {
           params: {
             "year":title.year,
@@ -46,7 +45,6 @@ function filesToGame(files: Array<string>, platform: string): Array<GameType>{
           }
         })
         .then(function (response) {
-          console.log(response);
           const { data } = response
           const {gameSearch}: Object = data
           if (gameSearch.length != 0){
@@ -55,13 +53,10 @@ function filesToGame(files: Array<string>, platform: string): Array<GameType>{
             const name: string = primaryChoice.name
             const g  = new Game(id, name);
             g.platform = platforms[platform]
-            g.filePath = file.toString();
+            g.file_path = file.toString();
+            g.nectar_id = id
             saveGamesToDB([g])
           }
-
-
-
-
         })
 
   })
@@ -73,8 +68,15 @@ function filesToGame(files: Array<string>, platform: string): Array<GameType>{
 
   function saveGamesToDB(games: Array<GameType>){
     games.forEach((g) => {
-      GameModel.forge({ title: g.name }).save().error(err => {
-        console.error(err)
+      // check if exists
+      GameModel.where({nectar_id: g.nectar_id}).fetch().then((element) => {
+        if(element == null){
+          GameModel.forge({ nectar_id:g.id, title: g.name,
+            file_path: g.file_path,
+           }).save().error(err => {
+            console.error(err)
+          })
+        }
       })
     })
   }
