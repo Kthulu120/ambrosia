@@ -24,7 +24,7 @@ export const bookshelf = require('bookshelf')(knexClient);
 export const GameModel = bookshelf.Model.extend({
   tableName: 'games',
   platforms: function() {
-    return this.belongsToMany(PlatformModel)
+    return this.belongsToMany(PlatformModel, 'platforms_games','game_id', 'platform_id').query({where: {access: 'readonly'}});
   },
   initialize() {
     this.on('saved', (model) => {
