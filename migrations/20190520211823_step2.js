@@ -19,9 +19,9 @@ exports.up = function(knex, Promise) {
       table.string('flags').nullable();
       table.string('path_to_launcher').nullable();
     }),
-    knex.schema.createTable('launchers_platforms', function(table){
+    knex.schema.createTable('launchers_games', function(table){
       table.increments('id').primary();
-      table.integer('platform_id').references('games.id');
+      table.integer('game_id').references('games.id');
       table.integer('launcher_id').references('launchers.id');
     }),
   ])
