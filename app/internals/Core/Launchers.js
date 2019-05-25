@@ -15,7 +15,6 @@ class Launcher{
     this.flags = flags;
     if(model !== null && model !== undefined){
       this.model.attachLauncher = self
-      
     }
   }
 
@@ -35,8 +34,8 @@ class Launcher{
 
 // launcher names and path to execute
 const launchers = {
-  //
-  'PCSX2': "",
+  // Default Installation Locaions
+  'PCSX2': "C:\Program Files (x86)\PCSX2 1.4.0\pcsx2.exe",
   'Dolphin': "",
   'RPCS3':"",
   'MAME': "",

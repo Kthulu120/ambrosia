@@ -32,7 +32,7 @@ export default class LibraryHomePage extends Component<Props> {
         {
           this.props.installed_games.map((game) => {
             console.log(game)
-            return <GameCover title={game.title}></GameCover>
+            return <GameCover game={game} title={game.title}></GameCover>
           })
         }
       </div>

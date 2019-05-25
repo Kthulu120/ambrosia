@@ -26,12 +26,9 @@ export const GameModel = bookshelf.Model.extend({
   platforms: function() {
     return this.belongsToMany(PlatformModel, 'platforms_games','game_id', 'platform_id').query({where: {access: 'readonly'}});
   },
-  initialize() {
-    this.on('saved', (model) => {
-      // This is fired after a model is updated
-      store.dispatch(setInstGamesRedux())
-    })
-  }
+  launchers: function() {
+    return this.belongsToMany(LauncherModel, 'launchers_games','game_id', 'launcher_id').query();
+  },
 });
 
 export const PlatformModel = bookshelf.Model.extend({
@@ -45,14 +42,15 @@ export const PlatformModel = bookshelf.Model.extend({
 export const LauncherModel = bookshelf.Model.extend({
   tableName: 'launchers',
   viewGames: function() {
-    return this.belongsToMany(PlatformModel);
+    return this.belongsToMany(GameModel, 'launchers_games','launcher_id', 'game_id').query({where: {access: 'readonly'}});
   },
   initialize() {
     this.on('saved', (model) => {
       // This is fired after a model is updated
         if(model.hasOwnProperty('attachedLauncher')){
-              this.attachLauncher.path_to_executable = model.attributes.path_to_executable;
-              this.install_folder = path.dirname(this.attachLauncher.path_to_executable);
+          console.log('TO WWE GOT AN ATTACHED LAUCHER')
+              this.attachedLauncher.path_to_executable = model.attributes.path_to_executable;
+              this.attachedLauncher.install_folder = path.dirname(this.attachLauncher.path_to_executable);
         }
     })
     this.on('saving', (model) => {

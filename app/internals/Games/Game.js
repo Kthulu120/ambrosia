@@ -1,3 +1,5 @@
+import { LauncherModel } from "../..";
+import {knexClient} from './../../index';
 // @flow
 
 export class Game{
@@ -20,13 +22,49 @@ export class Game{
     this.launcher_model = launcher_model;
   }
 
-  static ModelToGameFactory(launcher_model: Game){
+  launch() {
+    this.getLauncher().then((launcher_model) => {
+      const { exec } = require('child_process');
+      console.log(`${launcher_model.attributes.path_to_launcher}`)
+      exec(`"${launcher_model.attributes.path_to_launcher}" "${this.file_path}"`, (err, stdout, stderr) => {
+          if (err) {
+          // node couldn't execute the command
+          console.log("Could Not Execute")
+          return;
+        }
+
+        // the *entire* stdout and stderr (buffered)
+        console.log(`stdout: ${stdout}`);
+        console.log(`stderr: ${stderr}`);
+      });
+          })
+        }
+
+
+  async getLauncher(){
+    return knexClient.select('*')
+  .from('launchers_games')
+  .where({game_id: `${this.id}`}).then((rows) => {
+    if(rows.length > 0){
+      return LauncherModel.where({id: rows[0].launcher_id}).fetch().then((element) =>{
+        if(element != null){
+          return element
+        }
+      })
+
+    }
+  })
+  }
+
+
+
+  static ModelToGameFactory(game_model: Game){
     return new Game (
-      launcher_model.get('id'),
-      launcher_model.get('name'),
-      launcher_model.get('nectar_id'),
-      launcher_model.get('file_path'),
-      launcher_model,
+      game_model.get('id'),
+      game_model.get('name'),
+      game_model.get('nectar_id'),
+      game_model.get('file_path'),
+      game_model,
     )
   }
 
