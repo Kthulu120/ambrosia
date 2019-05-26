@@ -46,12 +46,9 @@ const launchers = {
   'Citra': "",
   'PPSSPP': "",
   // 3rd Party Launchers
-  'Steam': "",
+  'Steam': "C:\Program Files (x86)\Steam\Steam.exe",
   'Origin': "",
   'GOG': "",
-
-
-
 }
 
 export type GameLauncher = $Keys<typeof launchers>;

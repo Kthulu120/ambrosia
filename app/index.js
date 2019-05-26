@@ -63,7 +63,8 @@ export const LauncherModel = bookshelf.Model.extend({
 
 export type LauncherModelType = LauncherModel;
 
-Database.initializeDB();
+const mainDB = new Database(knexClient);
+mainDB.initializeDB()
 
 
 
