@@ -27,8 +27,22 @@ export const GameModel = bookshelf.Model.extend({
     return this.belongsToMany(PlatformModel, 'platforms_games','game_id', 'platform_id').query({where: {access: 'readonly'}});
   },
   launchers: function() {
-    return this.belongsToMany(LauncherModel, 'launchers_games','game_id', 'launcher_id').query();
+    return this.belongsToMany(LauncherModel, 'launchers_games','game_id', 'launcher_id').query({where: {access: 'readonly'}});
   },
+  findLauncher: async function(){
+    return knexClient.select('*')
+  .from('launchers_games')
+  .where({game_id: `${this.id}`}).then((rows) => {
+    if(rows.length > 0){
+      return LauncherModel.where({id: rows[0].launcher_id}).fetch().then((element) =>{
+        return element
+      })
+    }
+  })
+  },
+  setLauncher(){
+
+  }
 });
 
 export const PlatformModel = bookshelf.Model.extend({
