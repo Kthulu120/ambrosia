@@ -11,6 +11,7 @@ export class Game{
   file_path: string;
   alternativePlatforms: Array<string>;
   launcher_model: Object;
+  launcher_id: string | number | null;
 
 
 
@@ -25,11 +26,16 @@ export class Game{
   launch() {
     this.getLauncher().then((launcher_model) => {
       const { exec } = require('child_process');
-      console.log(`${launcher_model.attributes.path_to_launcher}`)
-      exec(`"${launcher_model.attributes.path_to_launcher}" "${this.file_path}"`, (err, stdout, stderr) => {
+      let launchcommand = "";
+      if(launcher_model != null && launcher_model.attributes.name == "Steam" && this.launcher_id != null){
+        launchcommand = `"${launcher_model.attributes.path_to_launcher}" -applaunch ${this.launcher_id} -no-browser`;
+      }else{
+        launchcommand = `"${launcher_model.attributes.path_to_launcher}" "${this.file_path}"`
+      }
+      exec(launchcommand, (err, stdout, stderr) => {
           if (err) {
           // node couldn't execute the command
-          console.log("Could Not Execute")
+          console.error("Could Not Execute Game ${this.name}")
           return;
         }
 
@@ -51,7 +57,6 @@ export class Game{
           return element
         }
       })
-
     }
   })
   }
@@ -59,13 +64,15 @@ export class Game{
 
 
   static ModelToGameFactory(game_model: Game){
-    return new Game (
+    const g = new Game (
       game_model.get('id'),
-      game_model.get('name'),
+      game_model.get('title'),
       game_model.get('nectar_id'),
       game_model.get('file_path'),
       game_model,
     )
+    g.launcher_id = game_model.get('launcher_id')
+    return g;
   }
 
 
