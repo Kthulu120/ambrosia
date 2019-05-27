@@ -30,7 +30,7 @@ export default async function readGameDirectory(folder: string) {
 
 
 // finds game from filename and platform, then return the most likely game
-export function filesToGame(files: Array<string>, platform: string, altTitles: Array<string> | null): Array<GameType>{
+export function filesToGame(files: Array<string>, platform: string, altTitles: Array<string> | null, launcherName: string | null): Array<GameType>{
   const path = require('path');
   const games = []
   files.forEach((file, index) => {
@@ -51,7 +51,7 @@ export function filesToGame(files: Array<string>, platform: string, altTitles: A
             platform
           }
         })
-        .then(function (response) {
+        .then(async function (response) {
           const { data } = response
           const {gameSearch}: Object = data
           if (gameSearch.length != 0){
@@ -59,8 +59,24 @@ export function filesToGame(files: Array<string>, platform: string, altTitles: A
             const id: number = primaryChoice.id
             const name: string = primaryChoice.name
             const g  = new Game(id, name, id, file.toString());
+            if(launcherName){
+              const possibleLaunchers = primaryChoice.altstoreproductSet.edges;
+              const gameLauncherArr = possibleLaunchers.filter(storeNode => storeNode.node.store.name === launcherName)
+              if(gameLauncherArr.length == 1){
+                if(launcherName == "Steam"){
+                  let gameID = gameLauncherArr[0].node.gameStoreId
+                  gameID = gameID.substring(gameID.indexOf('/app/') + 5).replace('/', '')
+                  console.log(gameID)
+                  g.launcher_id = gameID
+                }else{
+                  g.launcher_id = ""
+                }
+              }
+
+            }
+
             g.platform = platforms[platform]
-            saveGamesToDB([g])
+            await saveGamesToDB([g])
           }
         })
 
@@ -98,18 +114,18 @@ export async function findGame(title: string, year: number| null,platform ){
         // check if exists
         let element = await GameModel.where({nectar_id: g.nectar_id}).fetch()
         if(element == null){
-          element = await GameModel.forge({ nectar_id:g.id, title: g.name, file_path: g.file_path,}).save().error(err => console.error(err))
-            let platform_id = null
-              Object.keys(platforms).forEach(function(key, index) {
-                if (platforms[key] === g.platform){
-                  platform_id = index + 1
-                }
-            });
-            if(platform_id != null){
+          element = await GameModel.forge({ nectar_id:g.id, title: g.name, file_path: g.file_path, launcher_id: g.launcher_id}).save().error(err => console.error(err))
+          let platform_id = null
+          Object.keys(platforms).forEach(function(key, index) {
+            if (platforms[key] === g.platform){
+                platform_id = index + 1
+            }
+          });
+          if(platform_id != null){
               // Update Platform Game Junction Table
               element.platforms().attach(platform_id)
-            }
           }
+        }
         game_list.push(element)
         if(index + 1 == games.length){
             resolve(game_list)

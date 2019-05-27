@@ -31,7 +31,6 @@ export default class LibraryHomePage extends Component<Props> {
       <div className=""></div>
         {
           this.props.installed_games.map((game) => {
-            console.log(game)
             return <GameCover game={game} title={game.title}></GameCover>
           })
         }
