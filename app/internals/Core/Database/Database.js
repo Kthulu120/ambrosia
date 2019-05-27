@@ -44,7 +44,7 @@ export default class Database {
         const getDirectories = source =>
         readdirSync(source).map(name => join(source, name)).filter(isDirectory)
         const directories = getDirectories(install_path)
-        directories.forEach((folder) => {
+        await directories.forEach( async (folder) => {
           // largest exe probably game file?
           let largest_exe = null
           let largestSize = 0
@@ -60,7 +60,7 @@ export default class Database {
           });
           if(largest_exe != null){
             // save games and add launcher to junction table
-            filesToGame([largest_exe], "PC", [path.basename(folder)])
+            await filesToGame([largest_exe], "PC", [path.basename(folder)], "Steam")
             GameModel.where({file_path: largest_exe.toString()}).fetch().then((element)=> {
               if(element == null){
                 console.error(`Game: ${largest_exe} did not save`)
