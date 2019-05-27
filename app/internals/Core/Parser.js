@@ -50,7 +50,7 @@ export default class Parser
               if(this.yearInTitleRegex.test(realResult)){
                 const groups = realResult.match(this.yearInTitleRegex).groups
                 const {title, year } = groups
-                return {title, year }
+                return {title, year}
 
               }
               else{
@@ -61,7 +61,7 @@ export default class Parser
               console.debug("Parsing Game Title Failed for %s", realResult)
             }
 
-            return realResult;
+            return {title: realResult, year: ""};
         }
 
 

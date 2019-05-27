@@ -30,16 +30,24 @@ export default async function readGameDirectory(folder: string) {
 
 
 // finds game from filename and platform, then return the most likely game
-function filesToGame(files: Array<string>, platform: string): Array<GameType>{
+export function filesToGame(files: Array<string>, platform: string, altTitles: Array<string> | null): Array<GameType>{
   const path = require('path');
   const games = []
-  files.forEach(file => {
+  files.forEach((file, index) => {
       // look up game based off name and platform
-      const title = Parser.parseGameTitle(path.basename(file), true)
+      let title;
+      let year = "";
+      if(altTitles != null){
+        title = altTitles[index]
+      }else{
+        let gameInfo = Parser.parseGameTitle(path.basename(file), true)
+        year = gameInfo.year
+        title = gameInfo.title
+      }
       axios.get('http://127.0.0.1:8000/search/game', {
           params: {
-            "year":title.year,
-            "title":title.title,
+            "year": year,
+            "title":title,
             platform
           }
         })
@@ -61,9 +69,57 @@ function filesToGame(files: Array<string>, platform: string): Array<GameType>{
   return games;
 }
 
+export async function findGame(title: string, year: number| null,platform ){
+  return axios.get('http://127.0.0.1:8000/search/game', {
+          params: {
+            "year":title.year,
+            "title":title.title,
+            platform
+          }
+        }).then(function (response) {
+          const { data } = response
+          const {gameSearch}: Object = data
+          if (gameSearch.length != 0){
+            const primaryChoice = gameSearch[0]
+            const id: number = primaryChoice.id
+            const name: string = primaryChoice.name
+            const g  = new Game(id, name, id, file.toString());
+            g.platform = platforms[platform]
+            saveGamesToDB([g])
+          }
+        })
+}
 
 
   function saveGamesToDB(games: Array<GameType>){
+    return new Promise((resolve, reject) => {
+      const game_list = []
+      games.forEach(async (g, index) => {
+        // check if exists
+        let element = await GameModel.where({nectar_id: g.nectar_id}).fetch()
+        if(element == null){
+          element = await GameModel.forge({ nectar_id:g.id, title: g.name, file_path: g.file_path,}).save().error(err => console.error(err))
+            let platform_id = null
+              Object.keys(platforms).forEach(function(key, index) {
+                if (platforms[key] === g.platform){
+                  platform_id = index + 1
+                }
+            });
+            if(platform_id != null){
+              // Update Platform Game Junction Table
+              element.platforms().attach(platform_id)
+            }
+          }
+        game_list.push(element)
+        if(index + 1 == games.length){
+            resolve(game_list)
+        }
+      })
+    })
+  }
+
+
+  function saveGamesToDBi(games: Array<GameType>){
     games.forEach((g) => {
       // check if exists
       GameModel.where({nectar_id: g.nectar_id}).fetch().then((element) => {
@@ -84,7 +140,6 @@ function filesToGame(files: Array<string>, platform: string): Array<GameType>{
             // Update Platform Game Junction Table
             newElement.platforms().attach(platform_id)
           }
-           console.log(newElement.platforms())
           })
         }
       })
