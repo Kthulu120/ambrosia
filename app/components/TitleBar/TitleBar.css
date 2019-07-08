@@ -16,12 +16,33 @@
 
 }
 
+.userIcon .active{
+  border: 2px #32b532 solid;
+  border-radius: 100%;
+}
+
+.userIcon{
+  border: 3px solid gray;
+  border-radius: 100%;
+}
+
 .titleSearch{
   border-radius: 10px;
   padding-left: 5px;
+  background-color: #333743;
+  border: none;
+  color: #ffffff;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-highlight: none;
 }
 
+.titleSearch::placeholder{
+  color: white;
+}
 
+.titleSearch:focus {
+  outline-width: 0;
+}
 
 
 

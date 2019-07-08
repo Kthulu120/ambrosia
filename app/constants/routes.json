@@ -1,5 +1,7 @@
 {
   "HOME": "/",
   "COUNTER": "/counter",
-  "LIBRARY": "/library"
+  "LIBRARY": "/library",
+  "LOGIN": "/login",
+  "LOGIN_CALLBACK": "/kknb/callback:callback_url"
 }

@@ -28,12 +28,13 @@ export default class LibraryHomePage extends Component<Props> {
         </div>
         <div className="col-1 d-flex"><img className={styles.plus_minus_toggle} src={plus_circle} /></div>
       </div>
-      <div className=""></div>
+      <div className="d-flex flex-row flex-wrap">
         {
           this.props.installed_games.map((game) => {
-            return <GameCover game={game} title={game.title}></GameCover>
+            return <GameCover game={game} title={game.title}/>
           })
         }
+        </div>
       </div>
     );
   }

@@ -5,11 +5,12 @@ import App from './containers/App';
 import HomePage from './containers/HomePage';
 import TitleBar from './components/TitleBar/TitleBar';
 import LibraryHome from './containers/Library/LibraryHome'
-
+import Login from './containers/Login'
 export default () => (
   <App>
     <TitleBar/>
     <Switch>
+      <Route path={routes.LOGIN} component={Login}/>
       <Route path={routes.LIBRARY} component={LibraryHome} />
       <Route path={routes.HOME} component={HomePage} />
     </Switch>

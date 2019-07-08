@@ -12,6 +12,7 @@ export class Game{
   alternativePlatforms: Array<string>;
   launcher_model: Object;
   launcher_id: string | number | null;
+  cover_img: string | null
 
 
 
@@ -72,6 +73,7 @@ export class Game{
       game_model,
     )
     g.launcher_id = game_model.get('launcher_id')
+    g.cover_img = game_model.get('cover_img')
     return g;
   }
 
