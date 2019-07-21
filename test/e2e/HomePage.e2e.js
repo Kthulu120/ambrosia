@@ -1,3 +1,4 @@
+/***
 import { ClientFunction, Selector } from 'testcafe';
 import { ReactSelector, waitForReact } from 'testcafe-react-selectors';
 import { getPageUrl } from './helpers';
@@ -100,3 +101,5 @@ test('should back to home if back button clicked', async t => {
     .expect(Selector('[data-tid="container"]').visible)
     .ok();
 });
+
+*/

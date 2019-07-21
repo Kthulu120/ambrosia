@@ -11,7 +11,9 @@ import config from "../knexfile"
 import './app.global.css';
 import Database from './internals/Core/Database/Database'
 import {setInstGamesRedux} from './actions/library';
+import Ambrosia from './internals/Ambrosia'
 
+const AmbrosiaApp = new Ambrosia()
 const knex = require('knex');
 // Database setup
 const environment = 'development';
