@@ -910,6 +910,10 @@
   version "5.5.0"
   resolved "https://registry.npmjs.org/@fortawesome/fontawesome-free/-/fontawesome-free-5.5.0.tgz#0c6c53823d04457ae669cd19567b8a21dbb4fcfd"
 
+"@github/details-dialog-element@^3.0.6":
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@github/details-dialog-element/-/details-dialog-element-3.0.6.tgz#06b02c4850ceee491007f5caaf697714436f0325"
+
 "@iamstarkov/listr-update-renderer@0.4.1":
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/@iamstarkov/listr-update-renderer/-/listr-update-renderer-0.4.1.tgz#d7c48092a2dcf90fd672b6c8b458649cb350c77e"
@@ -1124,6 +1128,10 @@
     "@webassemblyjs/ast" "1.7.11"
     "@webassemblyjs/wast-parser" "1.7.11"
     "@xtuc/long" "4.2.1"
+
+"@webcomponents/custom-elements@^1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@webcomponents/custom-elements/-/custom-elements-1.2.4.tgz#7074543155396114617722724d6f6cb7b3800a14"
 
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"

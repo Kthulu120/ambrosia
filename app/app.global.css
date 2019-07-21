@@ -4,6 +4,8 @@
  */
 @import "~@fortawesome/fontawesome-free/css/all.css";
 @import "./app.primer.css";
+@import "~@github/details-dialog-element/index.css";
+
 body {
   position: relative;
   color: white;
@@ -40,4 +42,10 @@ a:hover {
   opacity: 1;
   text-decoration: none;
   cursor: pointer;
+}
+
+summary {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }

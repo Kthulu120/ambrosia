@@ -1,17 +1,22 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
+/* Import Any Needed Components for DOM*/
+import '@webcomponents/custom-elements'
+import '@github/details-dialog-element'
 import {getDirectory} from './internals/Core/Parser';
 import Root from './containers/Root';
 import { configureStore, history } from './store/configureStore';
-import config from './../knexfile'
+import config from "../knexfile"
 import './app.global.css';
 import Database from './internals/Core/Database/Database'
 import {setInstGamesRedux} from './actions/library';
+
 const knex = require('knex');
 // Database setup
 const environment = 'development';
 const sqlite3 = require('sqlite3').verbose();
+
 const db = new sqlite3.Database('resources/production-db.sqlite3');
 export const knexClient = knex(config[environment]);
 knexClient.migrate.latest(config);
@@ -23,13 +28,13 @@ export const bookshelf = require('bookshelf')(knexClient);
 // TODO: Export these to sepear module or into Database class
 export const GameModel = bookshelf.Model.extend({
   tableName: 'games',
-  platforms: function() {
+  platforms() {
     return this.belongsToMany(PlatformModel, 'platforms_games','game_id', 'platform_id').query({where: {access: 'readonly'}});
   },
-  launchers: function() {
+  launchers() {
     return this.belongsToMany(LauncherModel, 'launchers_games','game_id', 'launcher_id').query({where: {access: 'readonly'}});
   },
-  findLauncher: async function(){
+  async findLauncher(){
     return knexClient.select('*')
   .from('launchers_games')
   .where({game_id: `${this.id}`}).then((rows) => {
@@ -47,7 +52,7 @@ export const GameModel = bookshelf.Model.extend({
 
 export const PlatformModel = bookshelf.Model.extend({
   tableName: 'platforms',
-  viewGames: function() {
+  viewGames() {
     return this.belongsToMany(GameModel, 'platforms_games', 'platform_id', 'game_id').query({where: {access: 'readonly'}});
   }
 });
@@ -55,7 +60,7 @@ export const PlatformModel = bookshelf.Model.extend({
 
 export const LauncherModel = bookshelf.Model.extend({
   tableName: 'launchers',
-  viewGames: function() {
+  viewGames() {
     return this.belongsToMany(GameModel, 'launchers_games','launcher_id', 'game_id').query({where: {access: 'readonly'}});
   },
   initialize() {
@@ -78,7 +83,7 @@ export const LauncherModel = bookshelf.Model.extend({
 export type LauncherModelType = LauncherModel;
 
 const mainDB = new Database(knexClient);
-//mainDB.initializeDB()
+// TODO: add in safety check for mainDB.initializeDB()
 
 
 
