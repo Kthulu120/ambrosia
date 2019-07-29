@@ -14,18 +14,13 @@ export default async function readGameDirectory(folder: string) {
 
   // assume games are broken into Directories
   // since we don't have to this in fast manner we use async so we dont clog
-  Object.keys(platforms).forEach(async (konsole) => {
-    const __dirname = `${folder}/${platforms[konsole]}`
-    //console.log(__dirname)
-    //const gameDir = await fsPromises.readdir(folder, {'withFileTypes ': true})
+  Object.keys(platforms).forEach(async (konsole) => {)
     glob(__dirname + '/*.iso', {}, (err, files)=>{
       if (!err && files.length > 0) {
         filesToGame(files, platforms[konsole])
       }
     })
   });
-  //const readNonEmulateGames = await fsPromises.readdir('C:/Games', {'withFileTypes ': true})
-  //console.log(dotReachable)
 }
 
 

@@ -1,5 +1,6 @@
 import { LauncherModel } from "../..";
-import {knexClient} from './../../index';
+import {knexClient, GameModel} from './../../index';
+
 // @flow
 
 export class Game{
@@ -13,6 +14,7 @@ export class Game{
   launcher_model: Object;
   launcher_id: string | number | null;
   cover_img: string | null
+  launcher_name: string
 
 
 
@@ -45,21 +47,43 @@ export class Game{
         console.log(`stderr: ${stderr}`);
       });
           })
-        }
+    }
 
-
+  // get launcher model associated with game
   async getLauncher(){
     return knexClient.select('*')
-  .from('launchers_games')
-  .where({game_id: `${this.id}`}).then((rows) => {
-    if(rows.length > 0){
-      return LauncherModel.where({id: rows[0].launcher_id}).fetch().then((element) =>{
-        if(element != null){
-          return element
+    .from('launchers_games')
+    .where({game_id: `${this.id}`}).then((rows) => {
+      if(rows.length > 0){
+        return LauncherModel.where({id: rows[0].launcher_id}).fetch().then((element) =>{
+          if(element != null){
+            return element
+          }
+        })
+      }
+    })
+  }
+
+  // persist Game
+  save(){
+    let element = await GameModel.where({nectar_id: this.nectar_id}).fetch()
+    if(element == null){
+      element = await GameModel.forge({ nectar_id:this.id, launcher_name:this.launcher_name, platform_name: this.platform, title: this.name, file_path: this.file_path, launcher_id: this.launcher_id}).save().error(err => console.error(err))
+      let platform_id = null
+      Object.keys(platforms).forEach(function(key, index) {
+        if (platforms[key] === g.platform){
+            platform_id = index + 1
         }
-      })
+      });
+      if(platform_id != null){
+          // Update Platform Game Junction Table
+          element.platforms().attach(platform_id)
+      }
     }
-  })
+  }
+
+  find_by_id(id: string): GameModel{
+    return await GameModel.where({id: id}).fetch()
   }
 
 
