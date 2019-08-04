@@ -65,7 +65,7 @@ export class Game{
   }
 
   // persist Game
-  save(){
+  async save(){
     let element = await GameModel.where({nectar_id: this.nectar_id}).fetch()
     if(element == null){
       element = await GameModel.forge({ nectar_id:this.id, launcher_name:this.launcher_name, platform_name: this.platform, title: this.name, file_path: this.file_path, launcher_id: this.launcher_id}).save().error(err => console.error(err))
@@ -82,7 +82,7 @@ export class Game{
     }
   }
 
-  find_by_id(id: string): GameModel{
+  async find_by_id(id: string): GameModel{
     return await GameModel.where({id: id}).fetch()
   }
 
