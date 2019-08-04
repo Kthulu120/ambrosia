@@ -1,3 +1,4 @@
+// @flow
 import GameModel from './../../Models/Game'
 import LauncherModel from './../../Models/Launcher'
 import PlatformModel from './../../Models/Platform'

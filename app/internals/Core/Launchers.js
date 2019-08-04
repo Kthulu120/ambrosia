@@ -67,7 +67,7 @@ class Launcher{
 
 // Default Install Location, Default Game Install Location,
 // launcher names and path to execute
-const launchers = {
+export const launchers = {
   // Default Installation Locaions
   'PCSX2': new Launcher('PCSX2', "C:\Program Files (x86)\PCSX2 1.4.0\pcsx2.exe"),
   'Dolphin': "",

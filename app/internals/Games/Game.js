@@ -1,12 +1,13 @@
 // @flow
 import LauncherModel from "./../Models/Launcher";
-import { knexClient } from './../AmbrosiaApp'
+import { knexClient } from './../database'
 import type Platform from './../Platform/Platform'
 import GameModel from './../Models/Game';
 
 export class Game{
 
   id: number | string;
+
   name: string;
   platform: Platform;
   nectar_id: string
@@ -25,6 +26,15 @@ export class Game{
     this.nectar_id = nectar_id;
     this.file_path = file_path;
     this.launcher_model = launcher_model;
+  }
+
+  gameModelToGame(model: GameModel){
+    return new Game(model.attributes.id,
+      model.attributes.name,
+      model.attributes.nectar_id,
+      model.attributes.file_path,
+      model.attributes.launcher_model = model
+      )
   }
 
   launch() {

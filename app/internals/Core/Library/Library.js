@@ -1,6 +1,7 @@
+// @flow
 import { Game } from "../../Games/Game";
 import {GameLauncher, launchers } from "../Launchers"
-// @flow
+import GameModel from './../../Models/Game'
 
 export default class Library {
 
@@ -9,7 +10,7 @@ export default class Library {
 
 
   constructor(games=[]){
-    this.games = games
+    this.games = games || GameModel.allGames().map((game_model) => Game.gameModelToGame(game_model))
   }
 
   setGames(games: Array<Game>): void {

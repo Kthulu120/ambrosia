@@ -1,5 +1,6 @@
 // @flow
 import Settings from "./Core/Settings/Settings"
+import Library from './Core/Library/Library'
 
 export default class Ambrosia {
 
@@ -15,5 +16,16 @@ export default class Ambrosia {
 
   constructor(){
     this.settings = new Settings()
+    this.library = new Library()
+  }
+
+  // Bootstraps app and sets up core
+  _bootstrap (){
+
+    
+
+
+
+
   }
 }

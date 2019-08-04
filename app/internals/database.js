@@ -2,6 +2,8 @@
 const config =  require("../../knexfile")
 
 
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('resources/production-db.sqlite3');
 const knex = require('knex');
 const environment = 'development';
 
