@@ -3,7 +3,7 @@ import type {Platform, Game as GameType} from './Games/Game';
 import {Game} from './Games/Game'
 import {platforms} from './Platform/Platform'
 import Parser from './../internals/Core/Parser'
-import { GameModel } from './../index'
+import GameModel from './Models/Game'
 const axios = require('axios');
 
 export default async function readGameDirectory(folder: string) {
