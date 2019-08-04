@@ -1,3 +1,18 @@
 {
-  "gameLibraries": []
+  "gameLibraries": [],
+  "installLocations": {
+    "PCSX2": null,
+    "Dolphin": null,
+    "RPCS3":null,
+    "MAME": null,
+    "DeSmuMe": null,
+    "Mednafen": null,
+    "Cemu": null,
+    "Higan": null,
+    "Citra": null,
+    "PPSSPP": null,
+    "Steam": null,
+    "Origin": null,
+    "GOG": null
+  }
 }

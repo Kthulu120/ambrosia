@@ -32,42 +32,99 @@ export default class Parser
 			"/^(?<title>.+?)?(?:(?:[-_\W](?<![)\[!]))*(?<year>(1(8|9)|20)\d{2}(?!p|i|\d+|\]|\W\d+)))+(\W+|_|$)(?!\\)/",
         ];
 
-  constructor() {
+  static RejectHashedReleasesRegex = [
+                    // Generic match for md5 and mixed-case hashes.
+                    new RegExp("^[0-9a-zA-Z]{32}"),
+
+                    // Generic match for shorter lower-case hashes.
+                    new RegExp("^[a-z0-9]{24}$"),
+
+                    // Format seen on some NZBGeek releases
+                    // Be very strict with these coz they are very close to the valid 101 ep numbering.
+                    new RegExp("^[A-Z]{11}\d{3}$"),
+                    new RegExp("^[a-z]{12}\d{3}$"),
+
+                    //Backup filename (Unknown origins)
+                    new RegExp("^Backup_\d{5,}S\d{2}-\d{2}$"),
+
+                    //123 - Started appearing December 2014
+                    new RegExp("^123$"),
+
+                    //abc - Started appearing January 2015
+                    new RegExp("^abc$", 'i'),
+
+                    //b00bs - Started appearing January 2015
+                    new RegExp("^b00bs$", 'i')
+  ]
+        constructor() {
   }
 
-   static RemoveFileExtension(title: string): string
-        {
-          return title.split('.').slice(0, -1).join('.')
+  static RemoveFileExtension(title: string): string {
+    return title.split('.').slice(0, -1).join('.')
+  }
+
+
+  static parseGameTitle(title: string, isLenient: boolean) {
+      const realResult = this.RemoveFileExtension(title);
+      try {
+
+        if(this.yearInTitleRegex.test(realResult)){
+          const groups = realResult.match(this.yearInTitleRegex).groups
+          const {title, year } = groups
+          return {title, year}
         }
-
-
-        static parseGameTitle(title: string, isLenient: boolean)
-        {
-
-            const realResult = this.RemoveFileExtension(title);
-            try {
-
-              if(this.yearInTitleRegex.test(realResult)){
-                const groups = realResult.match(this.yearInTitleRegex).groups
-                const {title, year } = groups
-                return {title, year}
-
-              }
-              else{
-                throw Error();
-              }
-            }
-            catch( error) {
-              console.debug("Parsing Game Title Failed for %s", realResult)
-            }
-
-            return {title: realResult, year: ""};
+        else{
+          throw Error();
         }
+      }
+      catch( error) {
+        console.debug("Parsing Game Title Failed for %s", realResult)
+      }
 
+      return {title: realResult, year: ""};
+  }
 
+  static parseGameTitle(title: string, isLenient: boolean) {
+      const realResult = this.RemoveFileExtension(title);
+      try {
+        if (!this._validateBeforeParsing(title)) return null;
 
+        if(this.yearInTitleRegex.test(realResult)){
+          const groups = realResult.match(this.yearInTitleRegex).groups
+          const {title, year } = groups
+          return {title, year}
+        }
+        else{
+          throw Error();
+        }
+      }
+      catch( error) {
+        console.debug("Parsing Game Title Failed for %s", realResult)
+      }
+
+      return {title: realResult, year: ""};
+  }
+
+  static _validateBeforeParsing(title: string): boolean {
+    if (title.toLowerCase().includes("password") && title.toLowerCase().includes("yenc")) {
+        console.debug("");
+        return false;
+    }
+
+    if (!title) {
+        return false;
+    }
+
+    var titleWithoutExtension = this.RemoveFileExtension(title);
+
+    if (this.RejectHashedReleasesRegex.some(v => v.test(titleWithoutExtension)))
+    {
+        console.debug("Rejected Hashed Release Title: " + title);
+        return false;
+    }
+    return true;
+  }
 }
-
 
 export function slugify(text: string): string
 {

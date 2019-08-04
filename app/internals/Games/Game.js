@@ -1,6 +1,8 @@
-import { LauncherModel } from "../..";
-import {knexClient} from './../../index';
 // @flow
+import LauncherModel from "./../Models/Launcher";
+import { knexClient } from './../AmbrosiaApp'
+import type Platform from './../Platform/Platform'
+import GameModel from './../Models/Game';
 
 export class Game{
 
@@ -13,6 +15,7 @@ export class Game{
   launcher_model: Object;
   launcher_id: string | number | null;
   cover_img: string | null
+  launcher_name: string
 
 
 
@@ -45,24 +48,44 @@ export class Game{
         console.log(`stderr: ${stderr}`);
       });
           })
-        }
+    }
 
-
+  // get launcher model associated with game
   async getLauncher(){
     return knexClient.select('*')
-  .from('launchers_games')
-  .where({game_id: `${this.id}`}).then((rows) => {
-    if(rows.length > 0){
-      return LauncherModel.where({id: rows[0].launcher_id}).fetch().then((element) =>{
-        if(element != null){
-          return element
-        }
-      })
-    }
-  })
+    .from('launchers_games')
+    .where({game_id: `${this.id}`}).then((rows) => {
+      if(rows.length > 0){
+        return LauncherModel.where({id: rows[0].launcher_id}).fetch().then((element) =>{
+          if(element != null){
+            return element
+          }
+        })
+      }
+    })
   }
 
+  // persist Game
+  async save(){
+    let element = await GameModel.where({nectar_id: this.nectar_id}).fetch()
+    if(element == null){
+      element = await GameModel.forge({ nectar_id:this.id, launcher_name:this.launcher_name, platform_name: this.platform, title: this.name, file_path: this.file_path, launcher_id: this.launcher_id}).save().error(err => console.error(err))
+      let platform_id = null
+      Object.keys(platforms).forEach(function(key, index) {
+        if (platforms[key] === g.platform){
+            platform_id = index + 1
+        }
+      });
+      if(platform_id != null){
+          // Update Platform Game Junction Table
+          element.platforms().attach(platform_id)
+      }
+    }
+  }
 
+  async find_by_id(id: string): GameModel{
+    return await GameModel.where({id: id}).fetch()
+  }
 
   static ModelToGameFactory(game_model: Game){
     const g = new Game (
@@ -80,58 +103,3 @@ export class Game{
 
 
 }
-
-export const platforms =  {
-  "PlayStation 1": "PlayStation 1",
-  "PlayStation 2": "PlayStation 2",
-  "PlayStation 3": "PlayStation 3",
-  "PlayStation 4": "PlayStation 4",
-  "PS Vita": "PS Vita",
-  "Xbox 360": "Xbox 360",
-  "Xbox": "Xbox",
-  "Xbox One": "Xbox One",
-  "Playstation Portable": "Playstation Portable",
-  "Wii": "Wii",
-  "PC": "PC",
-  "Wii U": "Wii U",
-  "Nintendo Switch": "Nintendo Switch",
-  'Mac OS': 'Mac OS',
-  'Linux': 'Linux',
-  'iOS': 'iOS',
-  'Android': 'Android',
-  'Nintendo 3DS': "Nintendo 3DS",
-  "Nintendo DS": "Nintendo DS",
-  "Nintendo DSi": "Nintendo DSi",
-  'GameCube': 'GameCube',
-  'Nintendo 64': 'Nintendo 64',
-  "Game Boy Advance": 'Game Boy Advance',
-  'Game Boy Color': "Game Boy Color",
-  'Game Boy': 'Game Boy',
-  'SNES': 'SNES',
-  'NES': 'NES',
-  'Original Macintosh':'Original Macintosh',
-  'Apple': 'Apple',
-  'Commodore/Amiga':'Commodore / Amiga',
-  "Atari 7800": "Atari 7800",
-  "Atari 5200":"Atari 5200",
-  "Atari 2600":"Atari 2600",
-  "Atari Flashback":"Atari Flashback",
-  "Atari 8-bit":"Atari 8-bit",
-  "Atari ST":"Atari ST",
-  "Atari Lynx": "Atari Lynx",
-  "Atari XEGS": "Atari XEGS",
-  "Genesis": "Genesis",
-  "SEGA Saturn": "SEGA Saturn",
-  "SEGA CD": "SEGA CD",
-  "SEGA 32X":"SEGA 32X",
-  "SEGA Master System": "SEGA Master System",
-  "Dreamcast": "Dreamcast",
-  "3DO": "3DO",
-  "Jaguar": "Jaguar",
-  "Game Gear": "Game Gear",
-  "Nat Geo": "Nat Geo",
-  "Web": "Web"
-}
-
-export type Platform = $Keys<typeof platforms>;
-

@@ -8,13 +8,13 @@ export default class Settings{
     this.settings = this._readFromSettingsFile()
   }
 
-  _readFromSettingsFile(settings: Object){
+  _readFromSettingsFile(settings: Object): Object{
     const fs = require("fs");
     const contents = fs.readFileSync(this._file_path, 'utf-8');
     return JSON.parse(contents)
   }
 
-  _writeToSettings(){
+  _writeToSettingsFile(){
     const fs = require("fs");
     const contents = fs.writeFileSync(this._file_path, this.settings);
     this.settings = JSON.parse(contents);
@@ -22,7 +22,7 @@ export default class Settings{
 
   set(setting_name: string, value: any){
     this.settings[setting_name] = value
-    this._writeToSettings(this.settings.toString())
+    this._writeToSettingsFile(this.settings.toString())
   }
 
   get(setting_name: string){
@@ -31,6 +31,19 @@ export default class Settings{
 
   read(){
     return this.settings
+  }
+
+  addGameLibrary(launcher_name: String, file_path: string): void{
+    if (!launcher_name && !file_path) return
+    const gameLibraries = this.get('gameLibraries')
+    const alreadyExists = gameLibraries.some((ele) => ele.file_path === file_path)
+    if(!alreadyExists){
+      gameLibraries.push({
+        launcher: launcher_name,
+        file_path: file_path
+      })
+      this.set('gameLibraries', gameLibraries)
+    }
   }
 
 }
