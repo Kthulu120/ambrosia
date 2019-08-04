@@ -1,7 +1,8 @@
 // @flow
-import {bookshelf} from './../AmbrosiaApp'
 
-export const LauncherModel = bookshelf.Model.extend({
+let Bookshelf = require('./../database');
+
+export const LauncherModel = Bookshelf.Model.extend({
   tableName: 'launchers',
   viewGames() {
     return this.belongsToMany(GameModel, 'launchers_games','launcher_id', 'game_id').query({where: {access: 'readonly'}});

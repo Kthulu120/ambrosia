@@ -13,7 +13,7 @@ import Database from './internals/Core/Database/Database'
 import {setInstGamesRedux} from './actions/library';
 import Ambrosia from './internals/Ambrosia'
 
-export const AmbrosiaApp = new Ambrosia()
+const AmbrosiaApp = new Ambrosia()
 const knex = require('knex');
 // Database setup
 const environment = 'development';

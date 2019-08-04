@@ -1,3 +1,1 @@
-import { bookshelf} from './../../index'
-
 

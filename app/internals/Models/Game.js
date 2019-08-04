@@ -1,17 +1,19 @@
 // @flow
 import type LauncherModel from './../Models/Launcher'
 import type PlatformModel from './../Models/Platform'
-import {bookshelf} from './../AmbrosiaApp'
+let Bookshelf = require('./../database');
 
 
-export const GameModel = bookshelf.Model.extend({
-  tableName: 'games',
+class GameModel extends Bookshelf.Model {
+
+  get tableName() { return 'games'; }
+
   platforms() {
     return this.belongsToMany(PlatformModel, 'platforms_games','game_id', 'platform_id').query({where: {access: 'readonly'}});
-  },
+  }
   launchers() {
     return this.belongsToMany(LauncherModel, 'launchers_games','game_id', 'launcher_id').query({where: {access: 'readonly'}});
-  },
+  }
   async findLauncher(){
     return knexClient.select('*').from('launchers_games')
   .where({game_id: `${this.id}`}).then((rows) => {
@@ -21,9 +23,10 @@ export const GameModel = bookshelf.Model.extend({
       })
     }
   })
-  },
+  }
+
   setLauncher(){
   }
-});
+}
 
-export default GameModel
+export default Bookshelf.model('Games', GameModel);

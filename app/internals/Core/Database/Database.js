@@ -1,4 +1,5 @@
-import { PlatformModel, GameModel, LauncherModel } from './../../../index'
+import { GameModel, LauncherModel } from './../../../index'
+import PlatformModel from './../../Models/Platform'
 import {platforms} from './../../Platform/Platform'
 import {slugify} from './../Parser'
 import FileSystem from './../FileSystem'
