@@ -9,9 +9,6 @@ import { configureStore, history } from './store/configureStore';
 import './app.global.css';
 import {setInstGamesRedux} from './actions/library';
 
-const path = require('path');
-
-
 const store = configureStore();
 
 store.dispatch(setInstGamesRedux())
