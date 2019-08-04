@@ -2,6 +2,7 @@
 import Ambrosia from './Ambrosia'
 import config from "../../knexfile"
 import Database from './Core/Database/Database'
+import config from "../../knexfile"
 
 // Main internal setup for the appilcation
 export const AmbrosiaApp = new Ambrosia()
@@ -18,8 +19,6 @@ export const knexClient = knex(config[environment]);
 const mainDB = new Database(knexClient);
 
 knexClient.migrate.latest(config);
-
-const path = require('path');
 
 // Model Definitions
 export const bookshelf = require('bookshelf')(knexClient);
