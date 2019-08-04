@@ -1,7 +1,7 @@
 // @flow
 import { Game } from "../internals/Games/Game";
 import { GetState, Dispatch } from '../reducers/types';
-import {GameModel} from './../index'
+import GameModel from './../internals/Models/Game'
 export const SET_CLOUD_GAMES = 'SET_CLOUD_GAMES';
 export const SET_INSTALLED_GAMES = 'SET_INSTALLED_GAMES';
 

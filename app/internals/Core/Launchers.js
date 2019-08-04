@@ -1,7 +1,8 @@
+// @flow
 import type { Platform } from './../Games/Games'
 import type { Game } from "../Games/Game";
-import {AmbrosiaApp} from './../../index'
-import type { LauncherModelType } from './../../index'
+import {AmbrosiaApp} from './../AmbrosiaApp'
+import type LauncherModel from './../Models/Launcher'
 import Settings from './Settings/Settings'
 const { spawn } = require('child_process');
 
@@ -15,7 +16,7 @@ class Launcher{
   name: string;
   flags: string | null;
 
-  constructor(name: string, install_folder: string, path_to_executable: string | null, flags: string | null | undefined, model: LauncherModelType| null){
+  constructor(name: string, install_folder: string, path_to_executable: string | null, flags: string | null | undefined, model: LauncherModel| null){
     this.name = name;
     this.path_to_executable = path_to_executable;
     this.install_folder = install_folder;
@@ -46,7 +47,7 @@ class Launcher{
     program.on('close', () => console.info(`${game.name} has been closed`))
   }
 
-  static ModelToLauncherFactory(launcher_model: LauncherModelType){
+  static ModelToLauncherFactory(launcher_model: LauncherModel){
     return new Launcher (
       launcher_model.get('name'),
       launcher_model.get('path_to_launcher'),

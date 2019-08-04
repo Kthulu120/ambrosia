@@ -19,9 +19,10 @@ const mainDB = new Database(knexClient);
 
 knexClient.migrate.latest(config);
 
-const path = require('path');
-
 // Model Definitions
-export const bookshelf = require('bookshelf')(knexClient);
+export const Bookshelf  = require('bookshelf')(knexClient);
+
+Bookshelf.plugin('registry'); // Resolve circular dependencies with relations
+Bookshelf.plugin('visibility');
 
 
