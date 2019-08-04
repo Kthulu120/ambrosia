@@ -4,8 +4,7 @@ import FileSystem from '../Core/FileSystem'
 import {platform} from 'os'
 import Parser from '../Core/Parser'
 const axios = require('axios');
-import { AmbrosiaApp } from '../../index'
-const axios = require('axios');
+import { AmbrosiaApp } from '../AmbrosiaApp'
 
 export default class ParsingService {
 
@@ -13,13 +12,15 @@ export default class ParsingService {
   static parseGamesFromFolder(launcher_name:string, gamePlatform: string): Array<Game>{
     const libraries = AmbrosiaApp.settings.get('gameLibraries')
     const files = []
-    // TODO: maove to parallel file searching
+    // TODO: move to parallel file searching
     // grab files for each folder
     libraries.forEach((folder) => files.concat(this._findGamesInFolder(FileSystem.getAllFilesSync(folder.file_path, {withSha: true}))))
     const games = files.map(ele => {
       let g = this._matchGameWithFile(ele, gamePlatform)
-      g.launcher_name = launcher_name
-      return g
+      if (g){
+        g.launcher_name = launcher_name
+        return g
+      }
     })
     return games
   }
@@ -40,29 +41,30 @@ export default class ParsingService {
     return gameFiles
   }
 
-  static _matchGameWithFile(file: Object, platform: string=""): Game{
+  static async _matchGameWithFile(file: Object, platform: string=""): Game{
     const {title, year} = Parser.parseGameTitle(file.name)
-    const response = await axios.get('http://127.0.0.1:8000/search/game', {
+    const data = await axios.get('http://127.0.0.1:8000/search/game', {
           params: {
             "year": year,
             "title":title,
             platform
           }
-    })
-    const { data } = response
+    }).then(res => res.data)
     const {gameSearch}: Object = data
     if (gameSearch.length != 0){
       const primaryChoice = gameSearch[0]
       const id: number = primaryChoice.id
       const name: string = primaryChoice.name
-      const g  = new Game(id, name, id, file.toString());
+      const g  = new Game(id, name, id, file.file_path);
       g.platform = platform
-      g.save
+    }else{
+      return new Game(null, name, null, file.file_path)
     }
+    return g
   }
 
-  _parseGameInfo(file): Game{
-    GameModel.where({file_path: file.file_path)}).fetch().then((element)=> {
+  _parseGameInfo(file): Game {
+    GameModel.where({file_path: file.file_path}).fetch().then((element)=> {
       if(element == null){
         console.error(`Game: ${largest_exe} did not save`)
       }else{
