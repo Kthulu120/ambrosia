@@ -1,7 +1,7 @@
 // @flow
 import {bookshelf} from './../AmbrosiaApp'
 
-export default LauncherModel = bookshelf.Model.extend({
+export const LauncherModel = bookshelf.Model.extend({
   tableName: 'launchers',
   viewGames() {
     return this.belongsToMany(GameModel, 'launchers_games','launcher_id', 'game_id').query({where: {access: 'readonly'}});
@@ -22,3 +22,5 @@ export default LauncherModel = bookshelf.Model.extend({
     })
   }
 });
+
+export default LauncherModel

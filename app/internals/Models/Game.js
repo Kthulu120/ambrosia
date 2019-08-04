@@ -1,9 +1,10 @@
 // @flow
 import type LauncherModel from './../Models/Launcher'
 import type PlatformModel from './../Models/Platform'
+import {bookshelf} from './../AmbrosiaApp'
 
 
-export default GameModel = bookshelf.Model.extend({
+export const GameModel = bookshelf.Model.extend({
   tableName: 'games',
   platforms() {
     return this.belongsToMany(PlatformModel, 'platforms_games','game_id', 'platform_id').query({where: {access: 'readonly'}});
@@ -24,3 +25,5 @@ export default GameModel = bookshelf.Model.extend({
   setLauncher(){
   }
 });
+
+export default GameModel

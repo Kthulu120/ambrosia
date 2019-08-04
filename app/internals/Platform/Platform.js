@@ -1,6 +1,7 @@
 // @flow
 
-export default const platforms =  {
+
+export const platforms =  {
   "PlayStation 1": "PlayStation 1",
   "PlayStation 2": "PlayStation 2",
   "PlayStation 3": "PlayStation 3",
@@ -52,9 +53,11 @@ export default const platforms =  {
   "Web": "Web"
 }
 
-export default type Platform = $Keys<typeof platforms>;
-
 export type GameLibraryFolder = {
   file_path: string,
   launcher: string
 }
+
+
+export type Platform = $Keys<typeof platforms>;
+

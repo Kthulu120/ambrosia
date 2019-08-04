@@ -1,5 +1,5 @@
 import { PlatformModel, GameModel, LauncherModel } from './../../../index'
-import {platforms} from './../../Games/Game'
+import {platforms} from './../../Platform/Platform'
 import {slugify} from './../Parser'
 import FileSystem from './../FileSystem'
 import {filesToGame} from './../../FileWatcher'

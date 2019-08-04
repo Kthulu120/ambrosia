@@ -1,7 +1,7 @@
 // @flow
 import type {Platform, Game as GameType} from './Games/Game';
 import {Game} from './Games/Game'
-import {platforms} from './Games/Game'
+import {platforms} from './Platform/Platform'
 import Parser from './../internals/Core/Parser'
 import { GameModel } from './../index'
 const axios = require('axios');
