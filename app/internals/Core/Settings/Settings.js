@@ -16,8 +16,8 @@ export default class Settings{
 
   _writeToSettingsFile(){
     const fs = require("fs");
-    const contents = fs.writeFileSync(this._file_path, this.settings);
-    this.settings = JSON.parse(contents);
+    console.log(JSON.stringify(this.settings))
+    const contents = fs.writeFileSync(this._file_path, JSON.stringify(this.settings));
   }
 
   set(setting_name: string, value: any){

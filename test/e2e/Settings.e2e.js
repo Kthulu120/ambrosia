@@ -16,5 +16,5 @@ test('Settings can read and write from file', async t => {
 
 test('Test2', async t => {
     settings.addGameLibrary('PC', "C:/Games/Sid Meier's Civilization 6")
-    await t.expect(ParsingService.parseGamesFromFolder('PC', 'PC').eql([],'Did not find default Game'))
+    await t.expect(ParsingService.parseGamesFromFolder(settings.get('gameLibraries'),'PC', 'PC')).eql([],'Did not find default Game')
 });

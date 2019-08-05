@@ -8,7 +8,7 @@ export const AmbrosiaApp = new Ambrosia()
 
 // Database setup
 
-const mainDB = new Database(knexClient);
+// const mainDB = new Database(knexClient);
 
 
 export default AmbrosiaApp

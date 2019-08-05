@@ -3,6 +3,7 @@ import slash from './slash'
 
 const fs = require('fs')
 const sha1 = require('./sha1');
+const path = require('path')
 
 export default class FileSystem {
 
@@ -16,6 +17,14 @@ export default class FileSystem {
     const stats = fs.statSync(filename);
     const fileSizeInBytes = stats.size;
     return fileSizeInBytes;
+  }
+
+  static getFilename(fullPath){
+    return fullPath.replace(/^.*[\\\/]/, '')
+  }
+
+  static getDirname(fullPath){
+   return  path.dirname(fullPath)
   }
 
   static removeFileExtension(fileName: string){
@@ -53,6 +62,38 @@ export default class FileSystem {
     return files
   }
 
+  static checkFileInfo (file_path: string, file_extensions: Array<string> = ["dmg", "exe", "iso"], withSha: boolean = false){
+    const fileExt = FileSystem.getFileExtension(file_path)
+    //console.log(file_path)
+    if( file_extensions.includes(fileExt) && fs.lstatSync(file_path).isFile()) {
+      console.log(file_path)
+      const filename = FileSystem.getFilename(file_path)
+      const fSize = FileSystem.getFilesizeInBytes(file_path)
+      const file = {
+        size: fSize,
+        path: file_path,
+        folder: FileSystem.getDirname(file_path),
+        fileName: filename,
+        name: FileSystem.removeFileExtension(filename),
+        sha256:  null
+      }
+      if(withSha){
+        file.sha256 = sha1(fs.readFileSync(file_path))
+      }
+      return file
+    }
+    return null
+  }
+
+  static walkDir(dir, callback) {
+    fs.readdirSync(dir).forEach( f => {
+      let dirPath = path.join(dir, f);
+      let isDirectory = fs.statSync(dirPath).isDirectory();
+      isDirectory ?
+        this.walkDir(dirPath, callback) : callback(path.join(dir, f));
+    });
+  };
+
   /**
    * Gets all files recursively in folder and returns them
    * @param path: String
@@ -75,7 +116,8 @@ export default class FileSystem {
       fs.readdirSync(folder).forEach(filename => {
         const fileExt = FileSystem.getFileExtension(filename)
         const fullPath = `${folder.replace(/\\/g, '/')}/${filename}`
-        if( fileExtensions.includes(fileExt) || !fileExtensions && fs.lstatSync(fullPath).isFile()) {
+        console.log(fullPath)
+        if( fileExtensions.includes(fileExt) && fs.lstatSync(fullPath).isFile()) {
           const fSize = FileSystem.getFilesizeInBytes(fullPath)
           const file = {
             size: fSize,

@@ -9,12 +9,21 @@ import { AmbrosiaApp } from '../AmbrosiaApp'
 export default class ParsingService {
 
   // gets files from folders and determines which are video games
-  static parseGamesFromFolder(launcher_name:string, gamePlatform: string): Array<Game>{
-    const libraries = AmbrosiaApp.settings.get('gameLibraries')
+  static parseGamesFromFolder(libraries: Array<string>, launcher_name:string, gamePlatform: string): Array<Game>{
     const files = []
     // TODO: move to parallel file searching
     // grab files for each folder
-    libraries.forEach((folder) => files.concat(this._findGamesInFolder(FileSystem.getAllFilesSync(folder.file_path, {withSha: true}))))
+    libraries.forEach((folder) => {
+      const folderFiles = []
+      FileSystem.walkDir(folder.file_path, (ele) => {
+      const fileInfo = FileSystem.checkFileInfo(ele, ["dmg", "exe", "iso"], true)
+      if (fileInfo) {
+        folderFiles.push(fileInfo)
+      }
+      })
+      const gFiles = this._findGamesInFolder(folderFiles)
+      gFiles.forEach(ele => files.push(ele))
+    })
     const games = files.map(ele => {
       let g = this._matchGameWithFile(ele, gamePlatform)
       if (g){
@@ -34,8 +43,8 @@ export default class ParsingService {
         gameFiles.push(file)
       }
       else{
-        const isLargest = filesSameFolder.some((ele) => file.size < ele.size)
-        isLargest ? gameFiles.push(file) : null
+        const largerFileExists = filesSameFolder.some((ele) => file.size < ele.size)
+        !largerFileExists ? gameFiles.push(file) : null
       }
     })
     return gameFiles
@@ -51,16 +60,17 @@ export default class ParsingService {
           }
     }).then(res => res.data)
     const {gameSearch}: Object = data
+    console.log(title)
     if (gameSearch.length != 0){
       const primaryChoice = gameSearch[0]
       const id: number = primaryChoice.id
       const name: string = primaryChoice.name
       const g  = new Game(id, name, id, file.file_path);
       g.platform = platform
+      return g
     }else{
-      return new Game(null, name, null, file.file_path)
+      return null
     }
-    return g
   }
 
   _parseGameInfo(file): Game {
