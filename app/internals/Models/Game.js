@@ -17,7 +17,24 @@ class GameModel extends Bookshelf.Model {
   launchers() {
     return this.belongsToMany(LauncherModel, 'launchers_games','game_id', 'launcher_id').query({where: {access: 'readonly'}});
   }
-  async findLauncher(){
+
+  launch() {
+    const { exec } = require('child_process');
+    const launchcommand = `"${this.attributes.file_path}"`
+    exec(launchcommand, (err, stdout, stderr) => {
+      if (err) {
+      // node couldn't execute the command
+      console.error("Could Not Execute Game ${this.title}")
+      return;
+    }
+
+    // the *entire* stdout and stderr (buffered)
+    console.log(`stdout: ${stdout}`);
+    console.log(`stderr: ${stderr}`);
+  });
+  }
+
+  async findLauncher() {
     return knexClient.select('*').from('launchers_games')
       .where({game_id: `${this.id}`}).then((rows) => {
         if(rows.length > 0){
@@ -28,11 +45,19 @@ class GameModel extends Bookshelf.Model {
       })
   }
 
-  async allGames(){
-    return await this.fetchAll()
+  async allGames() {
+    return await GameModel.fetchAll()
   }
 
-  setLauncher(){
+  async find_by_id(id: String): GameModel | null {
+    await new GameModel({ id: id}).fetch()
+  }
+
+  async find(modelAttrbutes: Object): GameModel | null {
+    await new GameModel(modelAttrbutes).fetch()
+  }
+
+  setLauncher() {
   }
 }
 

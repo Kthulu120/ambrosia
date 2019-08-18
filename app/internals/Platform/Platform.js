@@ -58,6 +58,6 @@ export type GameLibraryFolder = {
   launcher: string
 }
 
-
+// Platform is essential a Enum
 export type Platform = $Keys<typeof platforms>;
 

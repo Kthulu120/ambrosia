@@ -19,7 +19,7 @@ export default class LibraryHomePage extends Component<Props> {
 
   render() {
     return (
-      <div className="container">
+      <div className="container d-flex flex-column height-full">
         <div className="d-flex flex-column">
           <div className="banner d-flex d-column">
 
@@ -43,10 +43,13 @@ export default class LibraryHomePage extends Component<Props> {
           </div>
           <p>News</p>
           <div className="d-flex flex-row game-news"></div>
-          
-
-
         </div>
+      <div className="d-flex flex-column">
+
+      <span>Played Recnetly</span>
+
+      </div>
+
       </div>
     );
   }

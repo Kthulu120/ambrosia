@@ -7,11 +7,11 @@ import '@github/details-dialog-element'
 import Root from './containers/Root';
 import { configureStore, history } from './store/configureStore';
 import './app.global.css';
-import {setInstGamesRedux} from './actions/library';
+import {setInstalledGames} from './actions/library';
+import GameGal from './internals/Core/gamegal'
+import {Game} from './internals/Games/Game'
 
-const store = configureStore();
-
-store.dispatch(setInstGamesRedux())
+export const store = configureStore();
 
 render(
   <AppContainer>

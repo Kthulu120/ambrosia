@@ -8,15 +8,15 @@ const settings = new FileSystem("resources/ambrosia-settings.test.json")
 test('FileSystem can read and write from system', async t => {
   const fs = require("fs");
   const fileSystem = new FileSystem()
-  console.log(await FileSystem.getAllFilesSync("C:/Users/Colon/Downloads/Nav", {withSha: true}))
+  //console.log(await FileSystem.getAllFilesSync("C:/Users/Colon/Downloads/Nav", {withSha: true}))
 });
 
-test('Test2', async t => {
+test('FileSystem returns proper amount of files for directory', async t => {
     /* Test 2 Code */
     const fs = require("fs");
-
-    console.log(await FileSystem.getFiles("C:/Users/Colon/Downloads/Nav", {withSha: true}))
-
-    // const contents = fs.readFileSync("resources/ambrosia-settings.test.json", { encoding: 'utf8' })
-
+    const files = []
+    const filePath = "C:/Games/Sid Meier's Civilization 6"
+    FileSystem.walkDir(filePath,(f) => files.push(f))
+    await t.expect(files.length).eql(18094)
+    // await t.expect(ParsingService.parseGamesFromFolder(settings.get('gameLibraries'),'PC', 'PC')).eql([],'Did not find default Game')
 });

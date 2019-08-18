@@ -60,15 +60,35 @@ export default class ParsingService {
           }
     }).then(res => res.data)
     const {gameSearch}: Object = data
-    console.log(title)
     if (gameSearch.length != 0){
       const primaryChoice = gameSearch[0]
       const id: number = primaryChoice.id
       const name: string = primaryChoice.name
-      const g  = new Game(id, name, id, file.file_path);
+      const g  = new Game({id, name, file_path: file.file_path});
       g.platform = platform
       return g
-    }else{
+    } else {
+      return null
+    }
+  }
+
+  static async matchGameFromPath(file_path): Game {
+    const {title, year} = Parser.parseGameTitle(file_path)
+    const data = await axios.get('http://127.0.0.1:8000/search/game', {
+          params: {
+            "year": year,
+            "title":title,
+            platform: ""
+          }
+    }).then(res => res.data)
+    const {gameSearch}: Object = data
+    if (gameSearch.length != 0){
+      const primaryChoice = gameSearch[0]
+      const id: number = primaryChoice.id
+      const name: string = primaryChoice.name
+      const g  = new Game({id, name, file_path: file.file_path});
+      return g
+    } else {
       return null
     }
   }

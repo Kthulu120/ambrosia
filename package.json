@@ -280,7 +280,7 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "source-map-support": "^0.5.9",
-    "sqlite3": "^4.0.9"
+    "sqlite3": "^4.1.0"
   },
   "devEngines": {
     "node": ">=7.x",

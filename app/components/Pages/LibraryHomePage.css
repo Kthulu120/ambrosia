@@ -1,9 +1,13 @@
 
 
-.plus_minus_toggle {
+.plus-minus-toggle {
   margin-top: auto;
   margin-bottom: auto;
   padding-left: 4px;
   height: 20px;
+}
+
+.library-left-sidebar {
+  min-width: 200px;
 }
 

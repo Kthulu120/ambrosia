@@ -63,7 +63,7 @@ export default class Parser
   }
 
 
-  static parseGameTitle(title: string, isLenient: boolean) {
+  static parseGameTitle(title: string) {
       const realResult = this.RemoveFileExtension(title);
       try {
 
@@ -83,7 +83,8 @@ export default class Parser
       return {title: realResult, year: ""};
   }
 
-  static parseGameTitle(title: string, isLenient: boolean) {
+  // trys to
+  static parseGameTitle(title: string) {
       const realResult = this.RemoveFileExtension(title);
       try {
         if (!this._validateBeforeParsing(title)) return null;

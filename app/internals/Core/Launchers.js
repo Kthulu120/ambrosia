@@ -44,7 +44,7 @@ class Launcher{
     const command = this.buildCommandLine(game)
     const program = spawn(command, { detached: true, stdio: 'ignore' })
     // TODO: add event listener for on close
-    program.on('close', () => console.info(`${game.name} has been closed`))
+    program.on('close', () => console.info(`${game.title} has been closed`))
   }
 
   static ModelToLauncherFactory(launcher_model: LauncherModel){
@@ -88,3 +88,5 @@ export const launchers = {
 
 export type GameLauncher = $Keys<typeof launchers>;
 
+
+export default Launcher

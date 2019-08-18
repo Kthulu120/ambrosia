@@ -15,10 +15,14 @@ export default class Library {
 
   setGames(games: Array<Game>): void {
     this.games = games
-    this.launchers = launchers
   }
 
-  // Search Games by name
+  addGame(game: Game) {
+    this.games.push(game)
+    return this.games
+  }
+
+// Search Games by name
   findGameByName(search: string){
     this.games.filter((game) => game.title.includes(search))
   }
