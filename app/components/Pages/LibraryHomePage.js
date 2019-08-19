@@ -5,20 +5,41 @@ import { map } from 'bluebird';
 import routes from '../../constants/routes';
 import GameCover from "../GameCover/GameCover"
 import {launchers} from './../../internals/Core/Launchers'
+import AsyncSelect from 'react-select/async';
+import Select from 'react-select'
 import store from './../../index'
 // Assets
 import plus_circle from "../../assets/img/minus_circle.png"
 import AmbrosiaApp from '../../internals/AmbrosiaApp';
 import GameModel from "./../../internals/Models/Game"
 import GameGal from '../../internals/Core/gamegal';
+import axios from 'axios'
 
 type Props = {
   installed_games: Array<Object>,
-  setInstalledGamesRedux: Function
+  setInstalledGamesRedux: Function,
+  gameTitles: [],
+  isLoading: Boolean,
+  filterGameListOptions: Array
 };
+
+
+const CustomOption = ({ innerProps, isDisabled }) =>
+  !isDisabled ? (
+    <div {...innerProps}>{/* your component internals */}</div>
+  ) : null;
+
 
 export default class LibraryHomePage extends Component<Props> {
   props: Props;
+
+  constructor(props){
+    super(props)
+    this.state = {
+      filterGameListOptions: props.installed_games
+    }
+  }
+
 
   componentDidMount(){
     this.props.setInstalledGamesRedux()
@@ -26,15 +47,56 @@ export default class LibraryHomePage extends Component<Props> {
 
   handleGameExecutable = (event: Event) => {
     this.setState({path_name: event.target.value})
-    this.searchGameFromTitle(event.target.value)
   }
 
   handleLauncher = (event: Event) => {
     this.setState({launcher: event.target.value})
   }
 
-  searchGameFromTitle(event){
+  handleGameTitle = (event: Event) => {
+    this.searchGameFromTitle(event.target.value)
+  }
 
+  searchGameFromTitle = (title, callback) => {
+    this.setState({isLoading: true})
+    axios.get(`http://127.0.0.1:8000/graphql`, {
+      params: {
+        query: `{
+          gameSearch(title:"${title}", year:"", platformName:"") {
+            id
+            name
+            description
+            platforms {
+              edges {
+                node {
+                  name
+                }
+              }
+            }
+          }
+        }`,
+        year: '',
+      }
+    }).then(response => {
+      const games = response.data.data.gameSearch
+      // fold duplicate games by GraphQL ID and set gameTitles
+      const allGames = {}
+      const optionSelectArr = []
+      games.forEach((ele) => {
+        if(!allGames[ele.id]){
+          allGames[ele.id] = ele
+          optionSelectArr.push({label: ele.name, value: ele.id})
+        }
+      })
+      callback(optionSelectArr)
+      this.setState({gameTitles: Object.values(allGames), isLoading: false})
+    }).catch(function (error) {
+    console.error(error);
+    })
+  }
+
+  handleGameFilterList = (event) => {
+    this.setState({filterGameListOptions: this.props.installed_games.filter(ele => ele.get('title') && ele.get('title').includes(event.target.value))})
   }
 
   handleAddGame = () => {
@@ -49,7 +111,7 @@ export default class LibraryHomePage extends Component<Props> {
       <div className="height-full d-flex full-width">
       <div className="library-left-sidebar">
         <div className="d-flex flex-column height-full flex-shrink-0 border-right mt-2 mb-1 left-0 position-absolute library-left-sidebar">
-          <details className="details-reset details-with-dialog mt-4">
+          <details className="details-reset details-with-dialog">
             <summary>
               <i className="fas fa-plus mr-1" />
               Add Game
@@ -59,10 +121,10 @@ export default class LibraryHomePage extends Component<Props> {
                 <div className="Box-header">
                   Add Game or Game Lbrary
                 </div>
-                <div className="Box-body overflow-auto d-flex flex-column">
-                  Add Games and Folders here
+                <div className="Box-body d-flex flex-column">
                   <form>
-                    <div className="d-flex flex-justify-around">
+                    <AsyncSelect cacheOptions loadOptions={this.searchGameFromTitle}></AsyncSelect>
+                    <div className="d-flex mt-2 flex-justify-around">
                       <input type="text" onChange={this.handleGameExecutable} type="file" name="gameExecutable" />
                       <select onChange={this.handleLauncher}>
                         {Object.keys(launchers).map((launcher) => <option key={launcher} value={launcher}>{launcher}</option>)}
@@ -78,7 +140,9 @@ export default class LibraryHomePage extends Component<Props> {
               </div>
             </details-dialog>
           </details>
-        </div>
+          <input placeholder="Search Game" onChange={this.handleGameFilterList} isSearchable></input>
+          { this.state.filterGameListOptions.map((game) => <div>{game.get('title')}</div>) }
+          </div>
       </div>
 
         <div className="d-flex col-11 flex-row">
