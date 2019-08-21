@@ -40,9 +40,10 @@ export default class LibraryHomePage extends Component<Props> {
     }
   }
 
-
+  // on mount load installed games and set filtered game state
   componentDidMount(){
     this.props.setInstalledGamesRedux()
+    this.setState({ filterGameListOptions: this.props.installed_games})
   }
 
   handleGameExecutable = (event: Event) => {
@@ -140,7 +141,7 @@ export default class LibraryHomePage extends Component<Props> {
               </div>
             </details-dialog>
           </details>
-          <input placeholder="Search Game" onChange={this.handleGameFilterList} isSearchable></input>
+          <input placeholder="Search Game" onChange={this.handleGameFilterList}></input>
           { this.state.filterGameListOptions.map((game) => <div>{game.get('title')}</div>) }
           </div>
       </div>

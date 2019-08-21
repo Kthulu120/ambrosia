@@ -1,15 +1,12 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
-/* Import Any Needed Components for DOM*/
+/* Import Any Needed Components for DOM */
 import '@webcomponents/custom-elements'
 import '@github/details-dialog-element'
 import Root from './containers/Root';
 import { configureStore, history } from './store/configureStore';
 import './app.global.css';
-import {setInstalledGames} from './actions/library';
-import GameGal from './internals/Core/gamegal'
-import {Game} from './internals/Games/Game'
 
 export const store = configureStore();
 
@@ -32,3 +29,6 @@ if (module.hot) {
     );
   });
 }
+
+
+export default store

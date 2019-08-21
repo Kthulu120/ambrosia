@@ -38,7 +38,7 @@ export default class TitleBar extends Component<Props> {
           <Link to={routes.LIBRARY}><h5>Library</h5></Link>
         </div>
         <div className="d-inline-block mr-2">
-        <Link to={routes.LOGIN}><h5>Community</h5></Link>
+        <Link to={routes.SETTINGS}><h5>Settings</h5></Link>
         </div>
 
 

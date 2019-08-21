@@ -2,6 +2,7 @@
   "HOME": "/",
   "COUNTER": "/counter",
   "LIBRARY": "/library",
+  "SETTINGS": "/settings",
   "LOGIN": "/login",
   "LOGIN_CALLBACK": "/kknb/callback:callback_url"
 }

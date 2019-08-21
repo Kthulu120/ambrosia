@@ -40,7 +40,10 @@ export default {
   plugins: [
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
-      AMBROSIA_REQUEST_URL: '127.0.0.1:8000'
+      AMBROSIA_REQUEST_URL: 'http://127.0.0.1:8000'
+    }),
+    new webpack.DefinePlugin({
+      AMBROSIA_REQUEST_URL: 'http://127.0.0.1:8000',
     }),
 
     new webpack.NamedModulesPlugin()
