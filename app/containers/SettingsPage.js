@@ -1,7 +1,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import SettingsHome from '../components/Pages/Settings';
-import * as CounterActions from '../actions/counter';
+import * as SettingActions from '../actions/settings';
 
 function mapStateToProps(state) {
   return {
@@ -10,7 +10,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(CounterActions, dispatch);
+  return bindActionCreators(SettingActions, dispatch);
 }
 
 export default connect(

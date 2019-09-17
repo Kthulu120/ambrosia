@@ -4,6 +4,8 @@ import slash from './slash'
 const fs = require('fs')
 const sha1 = require('./sha1');
 const path = require('path')
+const os = require('os')
+
 
 export default class FileSystem {
 
@@ -19,33 +21,49 @@ export default class FileSystem {
     return fileSizeInBytes;
   }
 
+  static getHomeDir(): string{
+    return os.homedir()
+  }
+
+  static getOperatingSys(): string {
+    return os.platform()
+  }
+
+  static isWindowsOS(): string {
+    return os.platform() === 'win32'
+  }
+
   static getFilename(fullPath){
     return fullPath.replace(/^.*[\\\/]/, '')
   }
 
   static getDirname(fullPath){
-   return  path.dirname(fullPath)
+   return  path.dirname(slash(fullPath))
   }
 
   static removeFileExtension(fileName: string){
-    return fileName.replace(/\.[^/.]+$/, "")
+    return slash(fileName).replace(/\.[^/.]+$/, "")
   }
 
   static isDirectory(pathname: string){
     return fs.lstatSync(pathname).isDirectory()
   }
 
+  static pathExists(pathname: String){
+    return fs.existsSync(slash(pathname))
+  }
+
   static isFile(pathname: string){
-    return fs.lstatSync(pathname).isFile()
+    return fs.lstatSync(slash(pathname)).isFile()
   }
 
   // Reads file from folder non-recursively
   static readFilesFromFolder(pathname: string, file_extensions: Array<string> = ["exe"]){
     const files = []
-    if(!fs.lstatSync(pathname).isDirectory()){
+    if(!fs.lstatSync(slash(pathname)).isDirectory()){
       return null
     }
-    fs.readdirSync(pathname).forEach(filename => {
+    fs.readdirSync(slash(pathname)).forEach(filename => {
       const fileExt = FileSystem.getFileExtension(filename)
       const full_path = `${folder.replace(/\\/g, '/')  }/${  filename}`
       const isFile = fs.lstatSync(filename).isFile()

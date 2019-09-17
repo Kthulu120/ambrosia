@@ -12,7 +12,6 @@ import store from './../../index'
 import plus_circle from "../../assets/img/minus_circle.png"
 import AmbrosiaApp from '../../internals/AmbrosiaApp';
 import GameModel from "./../../internals/Models/Game"
-import GameGal from '../../internals/Core/gamegal';
 import axios from 'axios'
 
 type Props = {
