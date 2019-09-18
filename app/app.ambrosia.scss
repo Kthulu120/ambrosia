@@ -1,0 +1,25 @@
+/* Ambrosia core stylings  */
+
+/** COLORS **/
+$primary-purple: #5D6AAB;
+$light-purple: #9BABFB;
+$dark-purple: #606888;
+$navy-blue: #36393F;
+$dark-blue: #36393F;
+$gray: #C4C4C4;
+$light-gray: #CBCCCD;
+
+body {
+  background-color: $d !important;
+}
+
+
+.main-nav-link{
+  &&:hover{
+    background: $light-gray !important;
+  }
+}
+
+.main-nav-link:hover{
+  background: rgba(79, 84, 92, 0.32);
+}

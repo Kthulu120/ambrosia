@@ -3,6 +3,8 @@
   "COUNTER": "/counter",
   "LIBRARY": "/library",
   "SETTINGS": "/settings",
+  "MESSAGES": "/messages",
+  "FRIENDS": "/friends",
   "LOGIN": "/login",
   "LOGIN_CALLBACK": "/kknb/callback:callback_url"
 }

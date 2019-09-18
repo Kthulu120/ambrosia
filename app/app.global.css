@@ -5,6 +5,7 @@
 @import "~@fortawesome/fontawesome-free/css/all.css";
 @import "./app.primer.css";
 @import "~@github/details-dialog-element/index.css";
+@import "./app.ambrosia.scss";
 
 html{
   height: 100%;
@@ -28,9 +29,6 @@ h2 {
   color: #fff;
 }
 
-p {
-  font-size: 24px;
-}
 
 li {
   list-style: none;
@@ -68,3 +66,4 @@ summary {
 }
 
 
+/*   */
