@@ -109,8 +109,8 @@ export default class LibraryHomePage extends Component<Props> {
   render() {
     return (
       <div className="height-full d-flex full-width">
-      <div className="library-left-sidebar">
-        <div className="d-flex flex-column height-full flex-shrink-0 border-right mt-2 mb-1 left-0 position-absolute library-left-sidebar">
+      <div className="">
+        <div className="d-flex flex-column height-full flex-shrink-0 border-right mt-2 mb-1">
           <details className="details-reset details-with-dialog">
             <summary>
               <i className="fas fa-plus mr-1" />

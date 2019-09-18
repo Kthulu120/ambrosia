@@ -1,0 +1,12 @@
+@import './../../stylesheets/colors.scss';
+
+
+.main-nav-container {
+  background-color: $dark-gray;
+  display: flex;
+  flex-direction: column;
+  max-width: 240;
+  width: 240px;
+  min-width: 240px;
+  height: 100%;
+}
