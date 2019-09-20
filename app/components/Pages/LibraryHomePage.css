@@ -1,13 +1,6 @@
-
-
-.plus-minus-toggle {
-  margin-top: auto;
-  margin-bottom: auto;
-  padding-left: 4px;
-  height: 20px;
-}
-
-.library-left-sidebar {
-  min-width: 200px;
+.main-header{
+  background-color: #2F3136;
+  color: white;
+  height: 60px;
 }
 

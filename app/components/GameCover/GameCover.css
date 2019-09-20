@@ -1,11 +1,6 @@
 
 
 
-.gameCover img{
-  height: 200px;
-  width: 125px;
-  border-radius: 10px;
-}
 
 .gameCover{
   display:flex;
