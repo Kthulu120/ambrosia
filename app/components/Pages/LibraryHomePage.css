@@ -1,6 +1,23 @@
-.main-header{
-  background-color: #2F3136;
+.main-header {
+  background-color: #2f3136;
   color: white;
   height: 60px;
 }
 
+.play-btn {
+  background-color: #606888;
+}
+
+.play-btn:hover {
+  background-color: #5d6aab;
+}
+
+.game-table tr:hover {
+  background: rgba(79, 84, 92, 0.5);
+  border-radius: 8px !important;
+}
+
+.game-table table {
+  min-width: 400px;
+  width: 95% !important;
+}

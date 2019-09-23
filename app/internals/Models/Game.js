@@ -8,6 +8,11 @@ let Bookshelf = require('./../database');
  */
 class GameModel extends Bookshelf.Model {
 
+
+  get title() { return this.get('title')}
+
+  get launcher_name() {return this.get('launcher_name')}
+
   get tableName() { return 'games'; }
 
   platforms() {

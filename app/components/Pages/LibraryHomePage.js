@@ -13,7 +13,8 @@ import store from './../../index'
 import GameModel from "./../../internals/Models/Game"
 import axios from 'axios'
 import AmbrosiaApp from '../../internals/AmbrosiaApp';
-import Table from './../Table/Table'
+import Table from 'rc-table';
+
 // Assets
 import plus_circle from "../../assets/img/minus_circle.png"
 import homeIcon from "../../assets/icons/home icon.png"
@@ -23,7 +24,11 @@ import square_view from "../../assets/icons/square_view.svg"
 import square_view_active from "../../assets/icons/square_view_active.svg"
 import big_view from "../../assets/icons/big_view.svg"
 import big_view_active from "../../assets/icons/big_view_active.svg"
-
+// Launcher Icons
+import dolphinIcon from './../../assets/icons/dolphinlogo_64.png'
+import pcsx2Icon from './../../assets/icons/pcsx2.png'
+import rpcs3Icon from './../../assets/icons/rpcs3.png'
+import pcGamingIcon from './../../assets/icons/pc_icon.png'
 
 type Props = {
   installed_games: Array<Object>,
@@ -107,16 +112,18 @@ export default class LibraryHomePage extends Component<Props> {
     })
   }
 
-  getGameLauncherIcon = (game) => {
-    switch(game.get('launcher_name')){
-      case "Dolphin":
-        return ""
-      case "PCSX2":
-        return ""
+  getGameLauncherIcon = (launcher_name) => {
+    switch(launcher_name){
       case "PC":
-        return ""
+        return pcGamingIcon
+      case "PCSX2":
+        return pcsx2Icon
       case "RPCS3":
-        return ""
+        return rpcs3Icon
+      case "Dolphin":
+        return dolphinIcon
+      default:
+        pcGamingIcon;
     }
   }
 
@@ -150,10 +157,16 @@ export default class LibraryHomePage extends Component<Props> {
     }
   }
 
+  getListViewColumns = () => {
+    return [{title: 'Title', key: 'title', dataIndex: 'title', mwidth: 400, className: "py-1 game-title", render: (val) => <span className="ml-2" style={{fontSize: 18}}>{val}</span>},
+    {title: 'Launcher', key: 'launcher_name', dataIndex: 'launcher_name', className: 'text-center mr-3', mwidth: 150, render: (val) => <img height={20} src={this.getGameLauncherIcon(val)}/>},
+    { title: '', dataIndex: '', key: 'f', className: 'text-center', width: 100, render: (o, row) => <div onClick={() => row.launch()} className="d-flex"><div className="px-4 py-1 play-btn rounded-1">Play</div></div>}]
+  }
+
+
 
   render() {
 
-    const columns =[{Header: 'title', accessor: 'launcher_name'}]
 
 
     return (
@@ -169,12 +182,13 @@ export default class LibraryHomePage extends Component<Props> {
         <div className="height-full width-full d-flex flex-wrap flex-column pl-2 pt-2">
         { this.state.coverStyle === "List" ?
         <div className="width-full d-flex">
-        </div> : null}
-        <ul className="height-full width-full d-flex flex-column flex-wrap">
-          {
-            this.props.installed_games.map((game) => <GameCover coverStyle={this.state.coverStyle} game={game} key={game.title} title={game.title}/>)
-          }
-        </ul>
+          <Table tableClassName={"width-full"} tableLayout={'auto'} className={"width-full"} id="game-library-table" rowClassName={'p-3'} prefixCls={'game-table width-full'} columns={this.getListViewColumns()} data={this.props.installed_games} />
+        </div> : <ul className="height-full width-full d-flex flex-column flex-wrap">
+        {
+          this.props.installed_games.map((game) => <GameCover coverStyle={this.state.coverStyle} game={game} key={game.title} title={game.title}/>)
+        }
+      </ul>}
+
         </div>
       </div>
     );
