@@ -158,9 +158,9 @@ export default class LibraryHomePage extends Component<Props> {
   }
 
   getListViewColumns = () => {
-    return [{title: 'Title', key: 'title', dataIndex: 'title', mwidth: 400, className: "py-1 game-title", render: (val) => <span className="ml-2" style={{fontSize: 18}}>{val}</span>},
+    return [{title: 'Title', key: 'title', dataIndex: 'title', mwidth: 400, className: "py-2  game-title", render: (val) => <span className="ml-2" style={{fontSize: 18}}>{val}</span>},
     {title: 'Launcher', key: 'launcher_name', dataIndex: 'launcher_name', className: 'text-center mr-3', mwidth: 150, render: (val) => <img height={20} src={this.getGameLauncherIcon(val)}/>},
-    { title: '', dataIndex: '', key: 'f', className: 'text-center', width: 100, render: (o, row) => <div onClick={() => row.launch()} className="d-flex"><div className="px-4 py-1 play-btn rounded-1">Play</div></div>}]
+    { title: '', dataIndex: '', key: 'f', className: 'text-center', width: 100, render: (o, row) => <div onClick={() => row.launch()} className="d-flex "><div className="px-4 py-1 play-btn ">Play</div></div>}]
   }
 
 

@@ -10,11 +10,12 @@
 
 .play-btn:hover {
   background-color: #5d6aab;
+  cursor: pointer;
 }
 
-.game-table tr:hover {
+.game-table tbody tr:hover {
   background: rgba(79, 84, 92, 0.5);
-  border-radius: 8px !important;
+  border-radius: 12px !important;
 }
 
 .game-table table {
