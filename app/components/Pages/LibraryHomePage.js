@@ -5,7 +5,7 @@ import { map } from 'bluebird';
 import routes from '../../constants/routes';
 import GameCover from "../GameCover/GameCover"
 import type {CoverStyle} from "../GameCover/GameCover"
-
+import Input from './../Input/Input'
 import {launchers} from './../../internals/Core/Launchers'
 import AsyncSelect from 'react-select/async';
 import Select from 'react-select'
@@ -52,7 +52,7 @@ export default class LibraryHomePage extends Component<Props> {
     super(props)
     this.state = {
       coverStyle: "Big",
-      filterGameListOptions: props.installed_games
+      filterGameList: props.installed_games
     }
   }
 
@@ -128,7 +128,7 @@ export default class LibraryHomePage extends Component<Props> {
   }
 
   handleGameFilterList = (event) => {
-    this.setState({filterGameListOptions: this.props.installed_games.filter(ele => ele.get('title') && ele.get('title').includes(event.target.value))})
+    this.setState({filterGameList: this.props.installed_games.filter(ele => ele.get('title') && ele.get('title').includes(event.target.value))})
   }
 
   handleAddGame = () => {
@@ -160,20 +160,20 @@ export default class LibraryHomePage extends Component<Props> {
   getListViewColumns = () => {
     return [{title: 'Title', key: 'title', dataIndex: 'title', mwidth: 400, className: "py-2  game-title", render: (val) => <span className="ml-2" style={{fontSize: 18}}>{val}</span>},
     {title: 'Launcher', key: 'launcher_name', dataIndex: 'launcher_name', className: 'text-center mr-3', mwidth: 150, render: (val) => <img height={20} src={this.getGameLauncherIcon(val)}/>},
-    { title: '', dataIndex: '', key: 'f', className: 'text-center', width: 100, render: (o, row) => <div onClick={() => row.launch()} className="d-flex "><div className="px-4 py-1 play-btn ">Play</div></div>}]
+    { title: '', dataIndex: '', key: 'f', className: 'text-center', width: 100, render: (o, row) => <div onClick={() => row.launch()} className="d-flex "><div className="px-4 py-1 play-btn rounded-2">Play</div></div>}]
   }
 
 
 
+
   render() {
-
-
 
     return (
       <div className="height-full d-flex flex-column width-full">
         <div className="width-full main-header d-flex flex-items-center pl-4">
           <img src={homeIcon} height={32}></img>
           <span className="f3 ml-2">Library</span>
+          <span className="ml-3"><Input onChange={this.handleGameFilterList} placeholder={'Search Game...'}/></span>
           <div style={{marginLeft: 'auto'}} className="mr-4">
             {this.getViewIcons()}
           </div>
@@ -182,10 +182,10 @@ export default class LibraryHomePage extends Component<Props> {
         <div className="height-full width-full d-flex flex-wrap flex-column pl-2 pt-2">
         { this.state.coverStyle === "List" ?
         <div className="width-full d-flex">
-          <Table tableClassName={"width-full"} tableLayout={'auto'} className={"width-full"} id="game-library-table" rowClassName={'p-3'} prefixCls={'game-table width-full'} columns={this.getListViewColumns()} data={this.props.installed_games} />
+          <Table tableClassName={"width-full"} tableLayout={'auto'} className={"width-full"} id="game-library-table" rowClassName={'p-3'} prefixCls={'game-table width-full'} columns={this.getListViewColumns()} data={this.state.filterGameList} />
         </div> : <ul className="height-full width-full d-flex flex-column flex-wrap">
         {
-          this.props.installed_games.map((game) => <GameCover coverStyle={this.state.coverStyle} game={game} key={game.title} title={game.title}/>)
+          this.state.filterGameList.map((game) => <GameCover coverStyle={this.state.coverStyle} game={game} key={game.title} title={game.title}/>)
         }
       </ul>}
 

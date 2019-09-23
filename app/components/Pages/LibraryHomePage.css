@@ -22,3 +22,10 @@
   min-width: 400px;
   width: 95% !important;
 }
+
+.ambrosia-search{
+  background: #202225;
+  border: 1px solid black;
+  border-radius: 8px;
+  color: #C4C4C4;
+}
