@@ -15,7 +15,7 @@ body {
   position: relative;
   color: white;
   height: 100vh;
-  background-color: #191922;
+  background-color: #36393F;
   font-family: Arial, Helvetica, Helvetica Neue, serif;
   overflow-y: hidden;
   margin: 0;
@@ -53,17 +53,6 @@ summary {
 }
 
 
-
-.plus-minus-toggle {
-  margin-top: auto;
-  margin-bottom: auto;
-  padding-left: 4px;
-  height: 20px;
-}
-
-.library-left-sidebar{
-  min-width: 200px;
-}
-
-
 /*   */
+
+@import "./components/Pages/LibraryHomePage.css"

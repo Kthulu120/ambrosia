@@ -4,15 +4,31 @@ import { Link } from 'react-router-dom';
 import { map } from 'bluebird';
 import routes from '../../constants/routes';
 import GameCover from "../GameCover/GameCover"
+import type {CoverStyle} from "../GameCover/GameCover"
+import Input from './../Input/Input'
 import {launchers} from './../../internals/Core/Launchers'
 import AsyncSelect from 'react-select/async';
 import Select from 'react-select'
 import store from './../../index'
-// Assets
-import plus_circle from "../../assets/img/minus_circle.png"
-import AmbrosiaApp from '../../internals/AmbrosiaApp';
 import GameModel from "./../../internals/Models/Game"
 import axios from 'axios'
+import AmbrosiaApp from '../../internals/AmbrosiaApp';
+import Table from 'rc-table';
+
+// Assets
+import plus_circle from "../../assets/img/minus_circle.png"
+import homeIcon from "../../assets/icons/home icon.png"
+import list_view from "../../assets/icons/list_view.svg"
+import list_view_active from "../../assets/icons/list_view_active.svg"
+import square_view from "../../assets/icons/square_view.svg"
+import square_view_active from "../../assets/icons/square_view_active.svg"
+import big_view from "../../assets/icons/big_view.svg"
+import big_view_active from "../../assets/icons/big_view_active.svg"
+// Launcher Icons
+import dolphinIcon from './../../assets/icons/dolphinlogo_64.png'
+import pcsx2Icon from './../../assets/icons/pcsx2.png'
+import rpcs3Icon from './../../assets/icons/rpcs3.png'
+import pcGamingIcon from './../../assets/icons/pc_icon.png'
 
 type Props = {
   installed_games: Array<Object>,
@@ -35,14 +51,15 @@ export default class LibraryHomePage extends Component<Props> {
   constructor(props){
     super(props)
     this.state = {
-      filterGameListOptions: props.installed_games
+      coverStyle: "Big",
+      filterGameList: props.installed_games
     }
   }
 
   // on mount load installed games and set filtered game state
   componentDidMount(){
     this.props.setInstalledGamesRedux()
-    this.setState({ filterGameListOptions: this.props.installed_games})
+    //this.setState({ filterGameListOptions: this.props.installed_games})
   }
 
   handleGameExecutable = (event: Event) => {
@@ -95,68 +112,83 @@ export default class LibraryHomePage extends Component<Props> {
     })
   }
 
+  getGameLauncherIcon = (launcher_name) => {
+    switch(launcher_name){
+      case "PC":
+        return pcGamingIcon
+      case "PCSX2":
+        return pcsx2Icon
+      case "RPCS3":
+        return rpcs3Icon
+      case "Dolphin":
+        return dolphinIcon
+      default:
+        pcGamingIcon;
+    }
+  }
+
   handleGameFilterList = (event) => {
-    this.setState({filterGameListOptions: this.props.installed_games.filter(ele => ele.get('title') && ele.get('title').includes(event.target.value))})
+    this.setState({filterGameList: this.props.installed_games.filter(ele => ele.get('title') && ele.get('title').includes(event.target.value))})
   }
 
   handleAddGame = () => {
     //const doesExist = this.props.installed_games.some(ele => fullPath === ele)
-    console.log(this.state)
     this.props.addVideoGame(this.state.path_name, this.state.launcher)
   }
 
+  getViewIcons = () => {
+    const icons = []
+    switch (this.state.coverStyle) {
+      case "List":
+        icons.push(<img onClick={() => this.setState({coverStyle: 'List'})} className="mx-1" src={list_view_active} key="list_active" height={24}></img>)
+        icons.push(<img onClick={() => this.setState({coverStyle: 'Square'})} className="mx-1" src={square_view} key="square" height={24}></img>)
+        icons.push(<img onClick={() => this.setState({coverStyle: 'Big'})} className="mx-1" src={big_view} key="big" height={24}></img>)
+        return icons
+      case "Square":
+          icons.push(<img onClick={() => this.setState({coverStyle: 'List'})} className="mx-1" src={list_view}  key="list" height={24}></img>)
+          icons.push(<img onClick={() => this.setState({coverStyle: 'Square'})} className="mx-1" src={square_view_active} key="square_active" height={24}></img>)
+          icons.push(<img onClick={() => this.setState({coverStyle: 'Big'})} className="mx-1" src={big_view} key="big" height={24}></img>)
+          return icons
+      case "Big":
+          icons.push(<img onClick={() => this.setState({coverStyle: 'List'})} className="mx-1" src={list_view} key="list" height={24}></img>)
+          icons.push(<img onClick={() => this.setState({coverStyle: 'Square'})} className="mx-1" src={square_view} key="square" height={24}></img>)
+          icons.push(<img onClick={() => this.setState({coverStyle: 'Big'})} className="mx-1" src={big_view_active} key="big_active" height={24}></img>)
+          return icons
+    }
+  }
+
+  getListViewColumns = () => {
+    return [{title: 'Title', key: 'title', dataIndex: 'title', mwidth: 400, className: "py-2  game-title", render: (val) => <span className="ml-2" style={{fontSize: 18}}>{val}</span>},
+    {title: 'Launcher', key: 'launcher_name', dataIndex: 'launcher_name', className: 'text-center mr-3', mwidth: 150, render: (val) => <img height={20} src={this.getGameLauncherIcon(val)}/>},
+    { title: '', dataIndex: '', key: 'f', className: 'text-center', width: 100, render: (o, row) => <div onClick={() => row.launch()} className="d-flex "><div className="px-4 py-1 play-btn rounded-2">Play</div></div>}]
+  }
+
+
+
 
   render() {
+
     return (
-      <div className="height-full d-flex full-width">
-      <div className="">
-        <div className="d-flex flex-column height-full flex-shrink-0 border-right mt-2 mb-1">
-          <details className="details-reset details-with-dialog">
-            <summary>
-              <i className="fas fa-plus mr-1" />
-              Add Game
-            </summary>
-            <details-dialog className="details-dialog anim-fade-in fast wide" aria-label="Dialog" role="dialog" aria-modal="true" tabindex="-1">
-              <div className="Box d-flex flex-column text-gray-dark">
-                <div className="Box-header">
-                  Add Game or Game Lbrary
-                </div>
-                <div className="Box-body d-flex flex-column">
-                  <form>
-                    <AsyncSelect cacheOptions loadOptions={this.searchGameFromTitle}></AsyncSelect>
-                    <div className="d-flex mt-2 flex-justify-around">
-                      <input type="text" onChange={this.handleGameExecutable} type="file" name="gameExecutable" />
-                      <select onChange={this.handleLauncher}>
-                        {Object.keys(launchers).map((launcher) => <option key={launcher} value={launcher}>{launcher}</option>)}
-                      </select>
-                    </div>
-
-                  </form>
-                </div>
-                <div className="Box-footer d-flex flex-justify-around">
-                  <button className="btn" onClick={this.handleAddGame}>Submit</button>
-                  <button type="button" className="btn" data-close-dialog="">Close</button>
-                </div>
-              </div>
-            </details-dialog>
-          </details>
-          <input placeholder="Search Game" onChange={this.handleGameFilterList}></input>
-          { this.state.filterGameListOptions.map((game) => <div>{game.get('title')}</div>) }
+      <div className="height-full d-flex flex-column width-full">
+        <div className="width-full main-header d-flex flex-items-center pl-4">
+          <img src={homeIcon} height={32}></img>
+          <span className="f3 ml-2">Library</span>
+          <span className="ml-3"><Input onChange={this.handleGameFilterList} placeholder={'Search Game...'}/></span>
+          <div style={{marginLeft: 'auto'}} className="mr-4">
+            {this.getViewIcons()}
           </div>
-      </div>
+        </div>
 
-        <div className="d-flex col-11 flex-row">
-          <div className="mb-3 width-full" style={{height: '16px', borderBottom: '2px solid #0f4a81', textAlign: 'left'}}>
-            <span className="pr-2" style={{fontSize: '20px', color: '#F3F5F6', backgroundColor: '#191922'}}>
-              All Games
-            </span>
-            <div className="d-flex flex-row flex-wrap">
-            {
-              this.props.installed_games.map((game) => <GameCover game={game} key={game.title} title={game.title}/>)
-            }
-            </div>
-          </div>
-          <div className="col-1 d-flex"><img className="plus-minus-toggle" src={plus_circle} /></div>
+        <div className="height-full width-full d-flex flex-wrap flex-column pl-2 pt-2">
+        { this.state.coverStyle === "List" ?
+        <div className="width-full d-flex">
+          <Table tableClassName={"width-full"} tableLayout={'auto'} className={"width-full"} id="game-library-table" rowClassName={'p-3'} prefixCls={'game-table width-full'} columns={this.getListViewColumns()} data={this.state.filterGameList} />
+        </div> : <ul className="height-full width-full d-flex flex-column flex-wrap">
+        {
+          this.state.filterGameList.map((game) => <GameCover coverStyle={this.state.coverStyle} game={game} key={game.title} title={game.title}/>)
+        }
+      </ul>}
+
         </div>
       </div>
     );
