@@ -29,6 +29,13 @@ h2 {
   color: #fff;
 }
 
+button {
+  background-color: transparent;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+}
 
 li {
   list-style: none;
@@ -50,6 +57,54 @@ summary {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+}
+
+.border-none {
+  border: none !important;
+}
+
+
+.settings-detail {
+  position: inherit;
+  margin: inherit;
+  top: inherit;
+  left: inherit;
+  z-index: inherit;
+  max-height: inherit;
+  max-width: inherit;
+  transform: none;
+  width: inherit;
+}
+
+
+.dialog-header {
+  background-color: #42464D;
+  color: white;
+  border-bottom: 1px solid black;
+}
+
+.dialog-header .selected {
+  background-color: #2F3136;
+}
+
+.dialog-body {
+  background-color: #36393F;
+  color: white;
+}
+
+.dialog-body button {
+  background-color: #5D6AAB;
+  color: white;
+  border: 1px solid black;
+}
+
+.ambrosia-dialog .btn-cancel {
+  background-color: #42464D;
+  border: 1px solid black;
+}
+
+.ambrosia-dialog {
+  border: 1px solid black;
 }
 
 
