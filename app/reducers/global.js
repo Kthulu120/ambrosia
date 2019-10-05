@@ -7,6 +7,7 @@ const stateobj = {
   refresh_token: "",
   last_access_tkn_time: "",
   last_tkn_refresh_time: "",
+  activeLogin: false,
 }
 
 export default function library(state: Object = stateobj, action: Action) {
@@ -16,6 +17,7 @@ export default function library(state: Object = stateobj, action: Action) {
       newState = Object.assign({}, state, {
         access_token: action.access_token,
         last_access_tkn_time :new Date().getTime().toString(),
+        activeLogin: true,
       })
       localStorage.setItem("settings", JSON.stringify(newState))
       return newState
@@ -26,6 +28,7 @@ export default function library(state: Object = stateobj, action: Action) {
           refresh_token: action.refresh_token,
           last_access_tkn_time: time,
           last_tkn_refresh_time: time,
+          activeLogin: true,
         })
         localStorage.setItem("settings", JSON.stringify(newState))
         return newState

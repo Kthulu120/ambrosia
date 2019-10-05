@@ -1,11 +1,12 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as LibraryActions from './../actions/library';
+import * as LibraryActions from './../actions/global';
 import {LoginCallback} from './Redirect'
 
 function mapStateToProps(state) {
   return {
     installed_games: state.library.installed_games,
+    global: state.global
   };
 }
 
