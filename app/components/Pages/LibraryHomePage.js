@@ -59,8 +59,16 @@ export default class LibraryHomePage extends Component<Props> {
   // on mount load installed games and set filtered game state
   componentDidMount(){
     this.props.setInstalledGamesRedux()
-    //this.setState({ filterGameListOptions: this.props.installed_games})
   }
+
+
+  // check if installed games updated if so then update filterGameList
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if(prevProps.installed_games !== this.props.installed_games){
+      this.setState({filterGameList: this.props.installed_games})
+    }
+  }
+
 
   handleGameExecutable = (event: Event) => {
     this.setState({path_name: event.target.value})
@@ -128,7 +136,7 @@ export default class LibraryHomePage extends Component<Props> {
   }
 
   handleGameFilterList = (event) => {
-    this.setState({filterGameList: this.props.installed_games.filter(ele => ele.get('title') && ele.get('title').includes(event.target.value))})
+    this.setState({filterGameList: this.props.installed_games.filter(ele => ele.get('title') && ele.get('title').includes(event.target.value || ''))})
   }
 
   handleAddGame = () => {
@@ -162,9 +170,6 @@ export default class LibraryHomePage extends Component<Props> {
     {title: 'Launcher', key: 'launcher_name', dataIndex: 'launcher_name', className: 'text-center mr-3', mwidth: 150, render: (val) => <img height={20} src={this.getGameLauncherIcon(val)}/>},
     { title: '', dataIndex: '', key: 'f', className: 'text-center', width: 100, render: (o, row) => <div onClick={() => row.launch()} className="d-flex "><div className="px-4 py-1 play-btn rounded-2">Play</div></div>}]
   }
-
-
-
 
   render() {
 

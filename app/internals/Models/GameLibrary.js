@@ -7,6 +7,10 @@ let Bookshelf = require('./../database');
  */
 class GameLibraryModel extends Bookshelf.Model {
 
+  get file_path() { return this.get('file_path')}
+
+  get launcher() { return this.get('launcher_name')}
+
   get tableName() { return 'game_libraries'; }
 
   async find_by_id(id: String): GameLibrary | null {

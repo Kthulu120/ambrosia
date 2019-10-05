@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './mainnav.scss';
 import routes from '../../constants/routes';
-
+import SettingsPage from './../../containers/SettingsPage'
 // Icons
 import mainLogo from './../../assets/logo/Ambrosia_64.png'
 import homeIcon from './../../assets/icons/home icon.png'
@@ -58,9 +58,12 @@ export default class MainNav extends Component<Props> {
         <div className="flex-shrink-0 d-flex ml-3 mb-2 flex-items-center" style={{marginTop: 'auto'}}>
           <img className="circle " src={defaultProfileIcon} height={48} width={48}></img>
           <Link className="ml-2 f4 flex-align-center" to={routes.LOGIN}>Login</Link>
-          <Link className="flex-self-center mr-2" style={{marginLeft: 'auto'}} to={routes.SETTINGS}>
-            <img className=""  src={settingsIcon} alt="Settings" height={24} width={24}/>
-          </Link>
+          <details class="details-overlay details-reset details-overlay-dark list-style-none" style={{marginLeft: 'auto'}}>
+            <summary className="list-style-none mr-3">
+              <img  src={settingsIcon} alt="Settings" height={24} width={24}/>
+            </summary>
+            <SettingsPage/>
+          </details>
         </div>
       </div>
     );
