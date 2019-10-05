@@ -49,7 +49,9 @@ export function setInstalledLaunchersRedux() {
 export function loadGameLibraries() {
   return async (dispatch: Dispatch, getState: GetState) => {
     await GameGal.fetchAll('GameLibrary').then((collection) => {
-      dispatch(setInstalledLaunchers(collection))
+      if(collection){
+        dispatch(setGameLibraries(collection))
+      }
     })
   };
 }
@@ -76,13 +78,37 @@ export function createLauncherModel(launcher_name: String, launcher_flags: Strin
   }
 }
 
+
+
+export function addGameLibrary(file_path: String, launcher_name: String){
+  return async(dispatch: Dispatch, getState: GetState) => {
+    const state = getState()
+    const { game_libraries } = state.settings
+    const pathAlreadyExists = game_libraries.some((lib) => lib.file_path == file_path)
+    if(!pathAlreadyExists){
+      const created_library = await GameGal.create('GameLibrary', {'file_path': file_path, 'launcher_name': launcher_name })
+      game_libraries.push(created_library)
+      dispatch(setGameLibraries(game_libraries))
+    }
+
+  }
+}
+
 export function deleteLauncherModel(launcher: LauncherModel) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState()
     const {installed_launchers} = state.settings
     launcher.destroy()
-
     dispatch(setInstalledLaunchers(installed_launchers.filter(ele => ele.get('id') !== launcher.get('id'))))
+  }
+}
+
+export function deleteGameLibrary(game_library: LauncherModel) {
+  return (dispatch: Dispatch, getState: GetState) => {
+    const state = getState()
+    const {game_libraries} = state.settings
+    game_library.destroy()
+    dispatch(setGameLibraries(game_libraries.filter(ele => ele.get('file_path') !== game_library.get('file_path'))))
   }
 }
 

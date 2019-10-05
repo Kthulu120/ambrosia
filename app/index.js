@@ -6,7 +6,7 @@ import '@webcomponents/custom-elements'
 import '@github/details-dialog-element'
 import Root from './containers/Root';
 import { configureStore, history } from './store/configureStore';
-import './app.global.css';
+import './app.global.scss';
 
 export const store = configureStore();
 
