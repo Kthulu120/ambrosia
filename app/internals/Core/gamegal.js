@@ -56,8 +56,20 @@ export default class GameGal {
       case 'GameLibrary':
         return await new GameLibraryModel(modelAttributes).fetch()
     }
-
     return null
+  }
+
+  static async delete(modelName, modelAttributes){
+    switch (modelName){
+      case 'Game':
+        return await new GameModel(modelAttributes).destroy()
+      case 'Launcher':
+        return await new LauncherModel(modelAttributes).destroy()
+      case 'Platform':
+        return await new PlatformModel(modelAttributes).destroy()
+      case 'GameLibrary':
+        return await new GameLibraryModel(modelAttributes).destroy()
+    }
   }
 
   static async fetchAll(modelName): Collection {

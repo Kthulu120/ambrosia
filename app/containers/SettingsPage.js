@@ -5,7 +5,9 @@ import * as SettingActions from '../actions/settings';
 
 function mapStateToProps(state) {
   return {
-    settings: state.settings
+    settings: state.settings,
+    installed_launchers: state.settings.installed_launchers,
+    game_libraries: state.settings.game_libraries
   };
 }
 

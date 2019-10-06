@@ -1,0 +1,12 @@
+
+
+.settings-sidebar {
+  min-width: 200px;
+  max-width: 400px;
+  width: 40%;
+  background: #3F4147;
+  padding-top: 32px;
+  flex-shrink: 0;
+}
+
+
