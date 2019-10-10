@@ -17,10 +17,6 @@ body {
 
 .main-nav-link{
   &:hover{
-    background: $light-gray !important;
+    background: rgba(79, 84, 92, 0.32);
   }
-}
-
-.main-nav-link:hover{
-  background: rgba(79, 84, 92, 0.32);
 }

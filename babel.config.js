@@ -31,6 +31,7 @@ module.exports = api => {
       [require('@babel/preset-react'), { development }]
     ],
     plugins: [
+      ["relay", {"compat": true}],
       // Stage 0
       require('@babel/plugin-proposal-function-bind'),
 
