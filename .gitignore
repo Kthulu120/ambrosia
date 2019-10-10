@@ -53,3 +53,6 @@ npm-debug.log.*
 # Database Files
 resource/production-db.sqlite3
 resources/production-db.sqlite3
+
+# Generated GraphQL relay partials
+**/__generated__/**
