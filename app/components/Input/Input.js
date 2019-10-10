@@ -12,10 +12,9 @@ type Props = {
 export default class Input extends Component<Props> {
   props: Props;
 
-
   render(){
     return (
-      <input onChange={this.props.onChange} placeholder={this.props.placeholder || ''} className="p-1 ambrosia-search"></input>
+      <input {...this.props} onChange={this.props.onChange} placeholder={this.props.placeholder || ''} className={"p-1 ambrosia-search " + this.props.className}></input>
     )
   }
 }

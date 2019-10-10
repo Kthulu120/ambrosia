@@ -83,12 +83,11 @@ export default class LauncherSettings extends Component<Props> {
       </details-dialog>
   )
 
-  getTableColumns = () => {
-    return [
+  getTableColumns = () => ([
     {title: 'Folder Path', key: 'file_path', dataIndex: 'title', width: '40%', className: "py-2  game-title", render: (val, row) => <span className="ml-2" style={{fontSize: 14}}>{row.file_path}</span>},
     {title: 'Launcher', key: 'name', dataIndex: 'title', mwidth: 400, className: "py-2 d-flex flex-justify-center", render: (val, row) => <img src={Launcher.getGameLauncherIcon(row.launcher)}/>},
     { title: <details className="details-reset"><summary><div className="px-2 py-1 play-btn rounded-2 bright">Add Game Library</div></summary> {this.addGameLibraryDialog()} </details>, dataIndex: '', key: 'remove', className: 'text-center', width: 150, render: (o, row) => <div onClick={() => this.props.deleteGameLibrary(row)} className="px-4 py-1 play-btn rounded-2">Remove</div>}
-  ]}
+  ])
 
   render(){
     return (
