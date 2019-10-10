@@ -60,6 +60,11 @@ export default merge.smart(baseConfig, {
   module: {
     rules: [
       {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: "javascript/auto",
+      },
+      {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
