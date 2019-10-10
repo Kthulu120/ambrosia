@@ -79,7 +79,6 @@ export default class MainNav extends Component<Props> {
           <span className="ml-2 f4">Friends</span>
         </div>
         </Link>
-        <Link className="ml-2 f4 flex-align-center" to={routes.LOGIN}>Login</Link>
 
         <QueryRenderer
           environment={environment}
