@@ -6,6 +6,9 @@ Ambrosia is a Game Launcher that allows you to play all the games installed on y
 
 
 ## Development
+
+To get relay set up you will need run `yarn relay` in order to generate the Relay GQL partials needed to run the app
+
 ## Run
 
 Start the app in the `dev` environment. This starts the renderer process in [**hot-module-replacement**](https://webpack.js.org/guides/hmr-react/) mode and starts a webpack dev server that sends hot updates to the renderer process:
