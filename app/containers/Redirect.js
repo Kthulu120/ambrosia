@@ -28,16 +28,59 @@ export function LoginCallback(props) {
     });
   }
 
+
+  function renderLoginForm(){
+    return (
+          <Input className="my-1" id="username" type="text" name="username" placeholder="username/email"/>,
+          <Input className="my-1" id="password" type="password" name="password" placeholder="password" />,
+          <button className="my-1" type="button" className="play-btn px-3 py-2 text-white" onClick={(e) => login(document.getElementById('username').value, document.getElementById('password').value)}>Login</button>,
+          <p className="mt-2">forgot your password?</p>,
+          <p>don’t have an account? <b>sign up here</b></p>
+    )
+  }
+
+  function renderForgotPasswordForm(){
+    return  [
+          <Input className="my-1" id="email" type="text" name="email" placeholder="email address"/>,
+          <Input className="my-1" id="username" type="text" name="username" placeholder="username"/>,
+          <Input className="my-1" id="password" type="password" name="password" placeholder="password" />,
+          <button className="my-1" type="button" className="play-btn px-3 py-2 text-white" onClick={(e) => login(document.getElementById('username').value, document.getElementById('password').value)}>submit</button>,
+          <p className="mt-2">forgot your password?</p>,
+          <p>Login</p>,
+    ]
+  }
+
+
+  function renderSignUpForm(){
+    return[
+          <Input className="my-1" id="email" type="text" name="email" placeholder="email address"/>,
+          <Input className="my-1" id="username" type="text" name="username" placeholder="username"/>,
+          <Input className="my-1" id="password" type="password" name="password" placeholder="password" />,
+          <button className="my-1" type="button" className="play-btn px-3 py-2 text-white" onClick={(e) => login(document.getElementById('username').value, document.getElementById('password').value)}>sign up</button>,
+          <p className="mt-2">forgot your password?</p>,
+          <p>Login</p>,
+    ]
+  }
+
+  function getAuthForm(formName: string) {
+    switch (formName) {
+      case 'login':
+        return renderLoginForm()
+      case 'forgot_password':
+        return renderForgotPasswordForm()
+      case 'signup':
+        return renderSignUpForm()
+      default:
+        return renderLoginForm()
+    }
+  }
+
   const isLoggedIn = props.global.access_token
   return <div className="width-full height-full d-flex flex-items-center flex-justify-center" style={{backgroundColor: '#606888'}}>
         { isLoggedIn ? <Redirect push to="/library" /> : ''}
         <div className="rounded-2 p-3 d-flex flex-column mr-6 flex-justify-center" style={{backgroundColor: '#36393F', maxHeight: 500, maxWidth: 400}}>
-          <img src={mainLogo} height={64} width={64} className="flex-self-center mb-2"/>
-          <Input className="my-1" id="username" type="text" name="username" placeholder="username/email"/>
-          <Input className="my-1" id="password" type="password" name="password" placeholder="password" />
-          <button className="my-1" type="button" className="play-btn px-3 py-2 text-white" onClick={(e) => login(document.getElementById('username').value, document.getElementById('password').value)}>Login</button>
-          <p className="mt-2">forgot your password?</p>
-          <p>don’t have an account? <b>sign up here</b></p>
+          <img src={mainLogo} alt="logo" height={64} width={64} className="flex-self-center mb-2"/>
+          {getAuthForm('login').map(ele => ele)}
         </div>
         <img src={gamePic} style={{maxWidth: 400, maxHeight: 343}} />
   </div>;

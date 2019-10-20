@@ -53,7 +53,7 @@ export default class MainNav extends Component<Props> {
     return (
       <div className={styles["main-nav-container"]}>
         <div className="d-flex flex-items-center flex-justify-center mb-2 mt-2">
-          <img height={64} width={64} src={mainLogo} />
+          <img height={64} width={64} src={mainLogo} alt="logo" />
           <span className="f3 ml-2">Ambrosia</span>
         </div>
 
@@ -61,7 +61,7 @@ export default class MainNav extends Component<Props> {
 
         <Link to={routes.LIBRARY} activeClassName="active" className={this.getlinkClassname()}>
         <div className="d-flex flex-items-center">
-          <img height={24} width={24} src={homeIcon} />
+          <img height={24} width={24} src={homeIcon} alt="library-icon" />
           <span className="ml-2 f4">Library</span>
         </div>
         </Link>
@@ -69,13 +69,13 @@ export default class MainNav extends Component<Props> {
 
         <Link to={routes.MESSAGES} activeClassName="active" className={this.getlinkClassname()}>
         <div className="d-flex flex-items-center">
-          <img height={24} width={24} src={mailIcon} />
+          <img height={24} width={24} src={mailIcon} alt="messages-icon" />
           <span className="ml-2 f4">Messages</span>
         </div>
         </Link>
         <Link to={routes.FRIENDS} activeClassName="active" className={this.getlinkClassname()}>
         <div className="d-flex flex-items-center">
-          <img height={24} width={24} src={friendsIcon} />
+          <img height={24} width={24} src={friendsIcon} alt="friends-icon" />
           <span className="ml-2 f4">Friends</span>
         </div>
         </Link>

@@ -13,8 +13,9 @@ export default class Input extends Component<Props> {
   props: Props;
 
   render(){
+    const {className, onChange, placeholder } = this.props;
     return (
-      <input {...this.props} onChange={this.props.onChange} placeholder={this.props.placeholder || ''} className={"p-1 ambrosia-search " + this.props.className}></input>
+      <input {...this.props} onChange={onChange} placeholder={placeholder || ''} className={`p-1 ambrosia-search ${className}`} />
     )
   }
 }
