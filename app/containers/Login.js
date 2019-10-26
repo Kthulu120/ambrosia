@@ -1,7 +1,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as LibraryActions from './../actions/global';
-import {LoginCallback} from './Redirect'
+import LoginCallback from './Redirect'
 
 console.log("HERE")
 
