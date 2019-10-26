@@ -16,7 +16,7 @@ export default class LauncherSettings extends Component<Props> {
     super(props);
     this.state = {
       gameLibraryPath: '',
-      launcher_name: props.installed_launchers ? props.installed_launchers[0].name : ''
+      launcher_name: props.installed_launchers.length > 0 ? props.installed_launchers[0].name : ''
     }
   }
 
@@ -69,7 +69,8 @@ export default class LauncherSettings extends Component<Props> {
 
               <div className="d-flex mt-2">
                 <span className="mr-2">Launcher:</span>
-                <select defaultValue={this.props.installed_launchers[0].name}>
+                <select onChange={(e) => this.setState({launcher_name: e.target.value})}
+                        defaultValue={this.props.installed_launchers.length > 0 ? this.props.installed_launchers[0].name : ''}>
                   {this.props.settings.installed_launchers.map((launcher => <option value={launcher.name}>{launcher.name}</option>))}
                 </select>
               </div>
