@@ -14,6 +14,9 @@ import settingsIcon from "../../assets/icons/settings.png"
 import defaultProfileIcon from "../../assets/img/default_profile.png"
 import { QueryRenderer, graphql } from 'react-relay';
 import environment from './../../environment'
+import {store} from './../../index'
+import {setUserGQLId} from './../../actions/global'
+
 
 type Props = {
 };
@@ -22,7 +25,9 @@ export default class MainNav extends Component<Props> {
 
   renderProfile = ({error, props}) => {
     let profilePic;
-    console.log(props)
+    if(props && props.viewer){
+      this.updateGQLId(props.viewer.id)
+    }
     if (props){
       profilePic = <img className="circle" src={props.viewer.avatar} height={48} width={48} alt="picture" />
     }
@@ -42,7 +47,13 @@ export default class MainNav extends Component<Props> {
         </details>
       </div>
     )
+  }
 
+  updateGQLId = (id) => {
+      const { global } =  store.getState()
+      if (global.graphQLId !== id){
+        store.dispatch(setUserGQLId(id))
+      }
   }
 
 
@@ -85,6 +96,7 @@ export default class MainNav extends Component<Props> {
           query={graphql`
             query MainNavQuery{
               viewer {
+                id
                 avatar
                 username
               }

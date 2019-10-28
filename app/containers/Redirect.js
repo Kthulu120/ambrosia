@@ -38,13 +38,13 @@ export default class LoginCallback extends Component<Props> {
 
 
   renderLoginForm = () => {
-    return (
+    return ([
           <Input id="username" type="text" name="username" placeholder="username/email"/>,
           <Input id="password" type="password" name="password" placeholder="password" />,
           <button type="button" className="play-btn px-3 py-2 text-white" onClick={() => this.login(document.getElementById('username').value, document.getElementById('password').value)}>Login</button>,
           <a><p className="mt-2">forgot your password?</p></a>,
           <p>don’t have an account? <a><b>sign up here</b></a></p>
-    )
+    ])
   }
 
   renderForgotPasswordForm = () => {
