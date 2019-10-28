@@ -4,6 +4,9 @@ import React, { Component } from 'react';
 import { QueryRenderer, graphql } from 'react-relay';
 import environment from './../../environment'
 import humanizeGraphQLResponse from './../../internals/graphQLHelpers'
+
+
+
 type Props = {
 }
 
@@ -24,8 +27,6 @@ const ChatRow = ({node, userID}) => {
       <div className="d-flex flex-column width-full">
         <p>{username || "Chat"}</p>
         <p className="overflow-hidden width-full">{messageSnippet}</p>
-
-
       </div>
 
     </div>

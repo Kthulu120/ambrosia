@@ -62,7 +62,7 @@ const promiseOptions = inputValue =>
     `
   },
     headers: {
-        Authorization: 'Token 17e2e1d4fe09dd648f84176c43d4d9d162bf287f'
+        Authorization: 'Token ' + JSON.parse(localStorage.getItem("settings")).access_token
       }
   }).post().then( (response) => {
       return resolve(response.data.data.users.edges.map(ele => ({label: ele.node.username, value: ele.node.id, image: ele.node.profile.avatar})))
@@ -94,16 +94,30 @@ class WithPromises extends Component {
 export default class MessagePage extends Component<Props> {
   props: Props;
 
-  render() {
-    // const ChatArea = <div></div>
+  constructor(props){
+    super(props)
+    this.state = {
+      currentChatId: ""
+    }
+  }
 
+  render() {
     return (
       <div className="width-full height-full d-flex">
         <div className="inner-sidebar d-flex flex-column" style={{width: '40%'}}>
           <WithPromises  />
           <ChatList userID={this.props.userID} />
         </div>
-        <div></div>
+        <div>
+          <div id="user_avatar d-flex" className="">
+            <img />
+            <div className="d-flex flex-column">
+              <div>User_name</div>
+              <div>playing_status</div>
+            </div>
+
+          </div>
+        </div>
       </div>
     );
   }
