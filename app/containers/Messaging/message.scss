@@ -1,0 +1,17 @@
+
+
+.select-option {
+  background: #202225;
+  box-shadow: 0px 4px 4px rgba(68, 68, 68, 0.17);
+  color: #C4C4C4;
+
+  &:hover {
+    background: rgba(75, 108, 131, 0.34);
+    color: black;
+  }
+
+  &:focus {
+    background: rgba(75, 108, 131, 0.34);
+    color: black;
+  }
+}
