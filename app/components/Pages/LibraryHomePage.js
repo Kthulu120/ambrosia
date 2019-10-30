@@ -14,6 +14,8 @@ import GameModel from "./../../internals/Models/Game"
 import axios from 'axios'
 import AmbrosiaApp from '../../internals/AmbrosiaApp';
 import Table from 'rc-table';
+import FileChooser from '../FileChooser'
+import slash from './../../internals/Core/slash'
 
 // Assets
 import plus_circle from "../../assets/img/minus_circle.png"
@@ -24,6 +26,7 @@ import square_view from "../../assets/icons/square_view.svg"
 import square_view_active from "../../assets/icons/square_view_active.svg"
 import big_view from "../../assets/icons/big_view.svg"
 import big_view_active from "../../assets/icons/big_view_active.svg"
+import xCircleIcon from './../../assets/icons/x-circle.png'
 // Launcher Icons
 import dolphinIcon from './../../assets/icons/dolphinlogo_64.png'
 import pcsx2Icon from './../../assets/icons/pcsx2.png'
@@ -51,8 +54,10 @@ export default class LibraryHomePage extends Component<Props> {
   constructor(props){
     super(props)
     this.state = {
-      coverStyle: "Big",
-      filterGameList: props.installed_games
+      coverStyle: "List",
+      filterGameList: props.installed_games,
+      path_name: "",
+      launcher: ''
     }
   }
 
@@ -140,8 +145,8 @@ export default class LibraryHomePage extends Component<Props> {
   }
 
   handleAddGame = () => {
-    //const doesExist = this.props.installed_games.some(ele => fullPath === ele)
     this.props.addVideoGame(this.state.path_name, this.state.launcher)
+    this.setState({path_name: "", launcher: ""})
   }
 
   getViewIcons = () => {
@@ -165,6 +170,45 @@ export default class LibraryHomePage extends Component<Props> {
     }
   }
 
+  submitAddGame = () => {
+    this.props.addVideoGame(this.state.path_name, this.state.launcher)
+  }
+
+
+
+  getAddGameModal = () => (
+        <details-dialog className="Box Box--overlay d-flex flex-column anim-fade-in fast ambrosia-dialog" style={{width: 550}}>
+        <div class="Box-header dialog-header">
+          <button class="float-right border-none" type="button" aria-label="Close dialog" data-close-dialog>
+            <img height={20} src={xCircleIcon} />
+          </button>
+          <h3 class="Box-title"> Add Game </h3>
+        </div>
+        <div class="overflow-auto dialog-body">
+          <div class="Box-body overflow-auto d-flex py-4">
+            <div className="px-2 d-flex flex-column">
+              <div className="d-flex">
+                <span className="pr-2">Select Game File:</span>
+                <FileChooser text={'Select Game File'} onChange={(files) => this.setState({path_name: slash(files[0].path)})} webkitdirectory={false} folderSelect={false} />
+              </div>
+              <div className="d-flex mt-2">
+                <span className="mr-2">Launcher:</span>
+                <select onChange={(e) => this.setState({launcher: e.target.value})}
+                        defaultValue='Select Launcher'>
+                  <option value=''>Select Launcher</option>
+                  {this.props.installed_launchers.map((launcher => <option value={launcher.name}>{launcher.name}</option>))}
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex">
+            <button type="button" onClick={this.submitAddGame} disabled={!this.state.path_name || !this.state.launcher} class="btn-block rounded-1 py-2 play-btn" data-close-dialog>Submit</button>
+            <button type="button" class="btn-block btn-cancel rounded-1 py-2" data-close-dialog>Close</button>
+          </div>
+        </div>
+      </details-dialog>
+  )
+
   getListViewColumns = () => {
     return [{title: 'Title', key: 'title', dataIndex: 'title', mwidth: 400, className: "py-2  game-title", render: (val) => <span className="ml-2" style={{fontSize: 18}}>{val}</span>},
     {title: 'Launcher', key: 'launcher_name', dataIndex: 'launcher_name', className: 'text-center mr-3', mwidth: 150, render: (val) => <img height={20} src={this.getGameLauncherIcon(val)}/>},
@@ -179,7 +223,13 @@ export default class LibraryHomePage extends Component<Props> {
           <img src={homeIcon} height={32}></img>
           <span className="f3 ml-2">Library</span>
           <span className="ml-3"><Input onChange={this.handleGameFilterList} placeholder={'Search Game...'}/></span>
-          <div style={{marginLeft: 'auto'}} className="mr-4">
+          <details className="details-reset" style={{marginLeft: 'auto'}}>
+            <summary >
+              <div className="px-2 py-1 play-btn rounded-2 bright">Add Game</div>
+            </summary>
+            {this.getAddGameModal()}
+          </details>
+          <div className="mr-4 ml-2">
             {this.getViewIcons()}
           </div>
         </div>

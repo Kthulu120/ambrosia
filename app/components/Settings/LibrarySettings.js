@@ -5,7 +5,7 @@ import Table from 'rc-table'
 import FileChooser from '../FileChooser'
 import slash from './../../internals/Core/slash'
 import xCircleIcon from './../../assets/icons/x-circle.png'
-
+import {intiateGameSearch} from './../../actions/library'
 
 
 export default class LauncherSettings extends Component<Props> {

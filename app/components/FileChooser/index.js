@@ -27,7 +27,7 @@ export default class FileChooser extends Component<Props> {
     onChange: (event) => {
       return event.target.value
     },
-    folderSelect: 'false'
+    folderSelect: false
   }
 
   clickFileInput = () => {

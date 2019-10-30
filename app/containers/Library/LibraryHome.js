@@ -7,6 +7,7 @@ import * as LibraryActions from '../../actions/library';
 function mapStateToProps(state) {
   return {
     installed_games: state.library.installed_games,
+    installed_launchers: state.settings.installed_launchers.concat({name: 'PC'})
   };
 }
 
