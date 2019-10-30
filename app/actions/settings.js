@@ -3,6 +3,7 @@ import type { GetState, Dispatch } from '../reducers/types';
 import GameGal from './../internals/Core/gamegal'
 import LauncherModel from './../internals/Models/Launcher'
 import AmbrosiaApp from '../internals/AmbrosiaApp';
+import { intiateGameSearch } from './library';
 
 export const ADD_LAUNCHER = 'ADD_LAUNCHER';
 export const REMOVE_LAUNCHER = 'REMOVE_LAUNCHER';
@@ -50,12 +51,20 @@ export function loadGameLibraries() {
   return async (dispatch: Dispatch, getState: GetState) => {
     await GameGal.fetchAll('GameLibrary').then((collection) => {
       if(collection){
+        intiateGameSearch(collection)
         dispatch(setGameLibraries(collection))
       }
     })
   };
 }
 
+/**
+ * Takes in launcher attributes and creates a launcher model and its game_libraries
+ * @param {string} launcher_name
+ * @param {string} launcher_flags
+ * @param {string} executable_path
+ * @param {array<string>} game_libraries
+ */
 export function createLauncherModel(launcher_name: String, launcher_flags: String, executable_path: String, game_libraries: Array | null) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState()
@@ -63,7 +72,7 @@ export function createLauncherModel(launcher_name: String, launcher_flags: Strin
     const existing_libraries = state.settings.game_libraries
     const alreadyExists = installed_launchers.some((ele) => ele.get('name') === launcher_name)
     if(!alreadyExists){
-      const launcher = GameGal.create('Launcher', { path_to_launcher: executable_path, name: launcher_name, flags: launcher_flags })
+      const launcher =await GameGal.create('Launcher', { path_to_launcher: executable_path, name: launcher_name, flags: launcher_flags })
       installed_launchers.push(launcher)
       dispatch(addLauncher(launcher))
       if (game_libraries) {
@@ -89,6 +98,7 @@ export function addGameLibrary(file_path: String, launcher_name: String){
       const created_library = await GameGal.create('GameLibrary', {'file_path': file_path, 'launcher_name': launcher_name })
       game_libraries.push(created_library)
       dispatch(setGameLibraries(game_libraries))
+      intiateGameSearch(game_libraries)
     }
 
   }

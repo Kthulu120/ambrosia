@@ -83,7 +83,6 @@ export default class Parser
       return {title: realResult, year: ""};
   }
 
-  // trys to
   static parseGameTitle(title: string) {
       const realResult = this.RemoveFileExtension(title);
       try {
