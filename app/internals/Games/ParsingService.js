@@ -72,39 +72,34 @@ export default class ParsingService {
     }
   }
 
-  static async matchGameFromPath(file_path): Game {
-    const {title, year} = Parser.parseGameTitle(file_path)
-    const data = await axios.get('http://127.0.0.1:8000/search/game', {
-          params: {
-            "year": year,
-            "title":title,
-            platform: ""
-          }
-    }).then(res => res.data)
-    const {gameSearch}: Object = data
-    if (gameSearch.length != 0){
-      const primaryChoice = gameSearch[0]
-      const id: number = primaryChoice.id
-      const name: string = primaryChoice.name
-      const g  = new Game({id, name, file_path: file.file_path});
-      return g
-    } else {
-      return null
-    }
-  }
-
-  _parseGameInfo(file): Game {
-    GameModel.where({file_path: file.file_path}).fetch().then((element)=> {
-      if(element == null){
-        console.error(`Game: ${largest_exe} did not save`)
-      }else{
-        element.findLauncher().then(async (launcher) => {
-          if(launcher == null){
-            const launcher = await LauncherModel.where({name: 'Steam'}).fetch()
-            element.launchers().attach(launcher.attributes.id)
-          }
-        })
-      }
+  static async matchGameFromPath(file_path, platform=""): Game {
+    const found_game = await new Promise(async function(resolve, reject){
+      const {title, year} = Parser.parseGameTitle(file_path)
+      let data = await axios.get('http://127.0.0.1:8000/search/game', {
+            params: {
+              "year": year,
+              "title":title,
+              platform: platform
+            }
+      }).then(res => {
+        console.log(res)
+        let responseData = JSON.parse(res.data)
+        const {gameSearch}: Object = responseData
+        if (gameSearch.length != 0){
+        const primaryChoice = gameSearch[0]
+        const id: number = primaryChoice.id
+        const name: string = primaryChoice.name
+        const g  = new Game({id, title:name, file_path: file_path});
+        resolve(g)
+        } else {
+        resolve(null)
+        }
+      })
     })
+
+    if(found_game){
+      return found_game
+    }
+    return null
   }
 }

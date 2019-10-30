@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 import { QueryRenderer, graphql } from 'react-relay';
 import environment from './../../environment'
-import humanizeGraphQLResponse from './../../internals/graphQLHelpers'
 
 
 

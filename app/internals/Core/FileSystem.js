@@ -134,7 +134,6 @@ export default class FileSystem {
       fs.readdirSync(folder).forEach(filename => {
         const fileExt = FileSystem.getFileExtension(filename)
         const fullPath = `${folder.replace(/\\/g, '/')}/${filename}`
-        console.log(fullPath)
         if( fileExtensions.includes(fileExt) && fs.lstatSync(fullPath).isFile()) {
           const fSize = FileSystem.getFilesizeInBytes(fullPath)
           const file = {
@@ -168,4 +167,17 @@ export default class FileSystem {
     }));
     return files.reduce((a, f) => a.concat(f), []);
   }
+
+
+  static getFileExtensionForLauncher(launcher_name: string){
+    const emulator_dict = {
+      'PCSX2': ["iso", "gzip"],
+      "Dolphin": ["iso", "exe"],
+      "Cemu": ["exe"]
+    }
+    return emulator_dict[launcher_name]
+  }
+
+
+
 }

@@ -6,8 +6,10 @@ import GameModel from './../internals/Models/Game'
 import slash from './../internals/Core/slash'
 import AmbrosiaApp from './../internals/AmbrosiaApp'
 import GameGal from './../internals/Core/gamegal'
-
+import FileSystem from './../internals/Core/FileSystem'
 import ParsingService from "../internals/Games/ParsingService";
+import {store} from './../index'
+
 
 export const SET_CLOUD_GAMES = 'SET_CLOUD_GAMES';
 export const SET_INSTALLED_GAMES = 'SET_INSTALLED_GAMES';
@@ -32,12 +34,17 @@ export function setInstalledGamesRedux() {
 export function addVideoGame(file_path, launcher_name) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState()
-    const installed_games = state.library.installed_games
+    let installed_games = state.library.installed_games
     const gameExists = await GameGal.find('Game', { file_path })
     if(!gameExists) {
-      const game = ParsingService.matchGameFromPath(file_path)
+      const game = await ParsingService.matchGameFromPath(file_path)
       if (game){
-        const saved_game = await GameGal.create('Game', {'file_path': file_path, 'metacritic_score': game.metacritic_score, })
+        const saved_game = await GameGal.create('Game', {title: game.title, 'file_path': file_path,
+                              launcher_name: launcher_name, nectar_id: game.database_id})
+        installed_games.push(saved_game)
+        dispatch(setInstalledGames(installed_games))
+      }else{
+        const saved_game = await GameGal.create('Game', {title: FileSystem.getFilename(file_path), 'file_path': file_path, launcher_name: launcher_name })
         installed_games.push(saved_game)
         dispatch(setInstalledGames(installed_games))
       }
@@ -59,4 +66,37 @@ export function incrementAsync(delay: number = 1000) {
       dispatch(setInstalledGames([]));
     }, delay);
   };
+}
+
+
+export async function intiateGameSearch(installed_libraries=[]){
+  // search game libraries
+  const { settings } = store.getState()
+  let installed_games
+  await GameGal.fetchAll('Game').then((collection) => {
+      installed_games = collection
+    })
+  const {game_libraries} = settings
+  installed_libraries = game_libraries && !installed_libraries ? game_libraries : installed_libraries
+  installed_libraries.forEach(element => {
+    const files = FileSystem.getAllFilesSync(element.file_path,{fileExtensions: FileSystem.getFileExtensionForLauncher(element.launcher)})
+    // loop over games see if games alreayExist in DB if not create new game
+    files.forEach(async (f) => {
+      const alreadyExists = installed_games.find((existingGame) => existingGame.get('file_path') === f.path)
+      if(!alreadyExists){
+        // see if we can match game for additional info
+        const foundGame = await ParsingService.matchGameFromPath(f.path)
+        let saved_game;
+        if(foundGame){
+          saved_game = await GameGal.create('Game', { title: foundGame.title, 'file_path': slash(f.path),
+                              launcher_name: element.get('launcher_name'), nectar_id: foundGame.database_id })
+        }else{
+          // cant match so use existing file information
+          saved_game = await GameGal.create('Game', {'file_path': slash(f.path), title: f.name, launcher_name: element.get('launcher_name') })
+        }
+        installed_games.push(saved_game)
+        store.dispatch(setInstalledGames(installed_games))
+      }
+    })
+  });
 }
