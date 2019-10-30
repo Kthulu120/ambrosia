@@ -4,7 +4,12 @@ import type PlatformModel from './../Models/Platform'
 let Bookshelf = require('./../database');
 
 /**
- * The Database Model
+ * The Database Model for Games
+ * Fields:
+ * title: String
+ * file_path: String
+ * launcher_name: String
+ *
  */
 class GameModel extends Bookshelf.Model {
 
