@@ -65,11 +65,8 @@ export default class FileSystem {
     }
     fs.readdirSync(slash(pathname)).forEach(filename => {
       const fileExt = FileSystem.getFileExtension(filename)
-      const full_path = `${folder.replace(/\\/g, '/')  }/${  filename}`
-      const isFile = fs.lstatSync(filename).isFile()
-      if (file_extensions instanceof string){
-        file_extensions = [file_extensions]
-      }
+      const full_path = `${slash(pathname).replace(/\\/g, '/')  }/${filename}`
+      const isFile = fs.lstatSync(full_path).isFile()
       if(file_extensions && file_extensions.includes(fileExt)){
         files.push(full_path)
       }

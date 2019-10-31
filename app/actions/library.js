@@ -9,7 +9,7 @@ import GameGal from './../internals/Core/gamegal'
 import FileSystem from './../internals/Core/FileSystem'
 import ParsingService from "../internals/Games/ParsingService";
 import {store} from './../index'
-
+import Steam from './../internals/Core/Services/Steam'
 
 export const SET_CLOUD_GAMES = 'SET_CLOUD_GAMES';
 export const SET_INSTALLED_GAMES = 'SET_INSTALLED_GAMES';
@@ -99,4 +99,5 @@ export async function intiateGameSearch(installed_libraries=[]){
       }
     })
   });
+  Steam.commitSearchTransaction()
 }
