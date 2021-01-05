@@ -263,7 +263,7 @@
     "@github/details-dialog-element": "^3.0.6",
     "@primer/css": "^12.4.0",
     "@webcomponents/custom-elements": "^1.2.4",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "bookshelf": "^0.14.2",
     "devtron": "^1.4.0",
     "electron-debug": "^2.0.0",
